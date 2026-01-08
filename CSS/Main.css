@@ -1,0 +1,72 @@
+@font-face {
+    font-family: Playfair_Display;
+    src: url(/EXTRA/Fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf);
+}
+
+body {
+    background-color: #400101;
+    font-family: Playfair_Display;
+    color: #BFBFAA;
+}
+
+h1 {
+    font-size: 150px;
+    position: absolute;
+    margin-left: 15px;
+}
+
+.molduras {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+}
+
+#moldura1{
+
+    width: 400px;
+}
+
+#moldura2{
+
+    width: 500px;
+    margin-right: 100px;
+}
+
+.hiperligacao {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+#museu {
+    width: 300px;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+#expo {
+    width: 300px;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+#esp {
+    width: 300px;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+#login {
+    width: 300px;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 4;
+    grid-column-end: 5;
+}
