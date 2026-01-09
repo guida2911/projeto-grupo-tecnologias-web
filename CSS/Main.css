@@ -40,33 +40,47 @@ h1 {
 }
 
 #museu {
-    width: 300px;
     grid-row-start: 1;
     grid-row-end: 2;
     grid-column-start: 1;
     grid-column-end: 2;
 }
 
-#expo {
+#museu img {
     width: 300px;
-    grid-row-start: 2;
+}
+
+#expo {
+    align-self: flex-end;
+    grid-row-start: 1;
     grid-row-end: 3;
     grid-column-start: 2;
     grid-column-end: 3;
+} 
+
+#expo img {
+    width: 300px;
 }
 
 #esp {
-    width: 300px;
     grid-row-start: 1;
     grid-row-end: 2;
     grid-column-start: 3;
     grid-column-end: 4;
 }
 
-#login {
+#esp img {
     width: 300px;
-    grid-row-start: 2;
+}
+
+#login {
+    align-self: flex-end;
+    grid-row-start: 1;
     grid-row-end: 3;
     grid-column-start: 4;
     grid-column-end: 5;
+}
+
+#login img {
+    width: 300px;
 }
