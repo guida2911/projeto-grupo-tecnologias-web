@@ -15,6 +15,12 @@ h1 {
     margin-left: 15px;
 }
 
+h2 {
+    color:#400101;
+    font-size:x-large;
+    text-align: center;
+}
+
 .molduras {
     display: flex;
     flex-direction: column;
@@ -22,21 +28,33 @@ h1 {
 
 }
 
-#moldura1{
+#moldura1 {
 
     width: 400px;
 }
 
-#moldura2{
+#moldura1:hover {
+   animation-name: spinReverse;
+   animation-duration: 2s;
+}
+
+#moldura2 {
 
     width: 500px;
     margin-right: 100px;
+}
+
+#moldura2:hover {
+   animation-name: spin;
+   animation-duration: 2s;
 }
 
 .hiperligacao {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
+    margin-left: 40px;
+    row-gap: 20px;
 }
 
 #museu {
@@ -48,6 +66,25 @@ h1 {
 
 #museu img {
     width: 300px;
+    justify-content: center;
+    align-content: center;
+}
+
+.museuTexto {
+    background-color: #BFBFAA;
+    border-radius: 5px;
+    width: 300px;
+    height: 70px;
+    align-self: flex-end;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    display: none;
+}
+
+#museu:hover + .museuTexto {
+    display: block;
 }
 
 #expo {
@@ -62,6 +99,23 @@ h1 {
     width: 300px;
 }
 
+.expoTexto {
+    background-color: #BFBFAA;
+    border-radius: 5px;
+    width: 300px;
+    height: 70px;
+    align-self: flex-end;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    display: none;
+}
+
+#expo:hover + .expoTexto {
+    display: block;
+}
+
 #esp {
     grid-row-start: 1;
     grid-row-end: 2;
@@ -71,6 +125,23 @@ h1 {
 
 #esp img {
     width: 300px;
+}
+
+.espTexto {
+    background-color: #BFBFAA;
+    border-radius: 5px;
+    width: 300px;
+    height: 70px;
+    align-self: flex-end;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    display: none;
+}
+
+#esp:hover + .espTexto {
+    display: block;
 }
 
 #login {
@@ -83,4 +154,46 @@ h1 {
 
 #login img {
     width: 300px;
+}
+
+.loginTexto {
+    background-color: #BFBFAA;
+    border-radius: 5px;
+    width: 300px;
+    height: 70px;
+    align-self: flex-end;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column-start: 4;
+    grid-column-end: 5;
+    display: none;
+
+}
+
+#login:hover + .loginTexto {
+    display: block;
+}
+
+@keyframes spin {
+    5% {
+        transform: rotate(0deg);
+    }
+    10%, 90% {
+        transform: rotate(10deg);
+    }
+    95% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes spinReverse {
+    5% {
+        transform: rotate(0deg);
+    }
+    10%, 90% {
+        transform: rotate(-10deg);
+    }
+    95% {
+        transform: rotate(0deg);
+    }
 }
