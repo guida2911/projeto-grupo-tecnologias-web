@@ -1,0 +1,31 @@
+body {
+    background-color: #400101;
+}
+
+.grid-container {
+   width: 100vw;
+   height: 100vh;
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   grid-template-rows: 1fr;
+}
+
+.museu1 {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+
+.museu1 img {
+    width: 400px;
+}
+
+.museuInfo1 {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  background-color:rgba(0, 0, 0, 0.3);
+  color: white;
+}
