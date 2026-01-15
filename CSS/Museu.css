@@ -1,31 +1,162 @@
-body {
-    background-color: #400101;
+@font-face {
+    font-family: Playfair_Display;
+    src: url(/EXTRA/Fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf);
 }
 
-.grid-container {
-   width: 100vw;
-   height: 100vh;
+body {
+    background-color: #8b7041;
+    margin: 0;
+    padding: 0;
+}
+
+.grid-container{
    display: grid;
-   grid-template-columns: 1fr 1fr;
+   grid-template-columns: 1fr 1fr 1fr;
    grid-template-rows: 1fr;
 }
 
-.museu1 {
+.museu1 img {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    height: 700px;
+    position: absolute;
+    margin-top: 0px;
+    margin-left: 35px;
+    z-index: -5;
+}
+
+.museu1PopUp {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    display: none;
+}
+
+.museu1PopUpText {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-family: Playfair_Display;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.museu1PopUpText h2 {
+    margin-left: 50px;
+    margin-top: 400px;
+}
+
+.museu1PopUpText p {
+    margin-left: 50px;
+}
+
+#m1Btn {
+    width: 100px;
+    height: 50px;
+    border-radius: 20px;
+    margin-left: 600px;
+}
+
+.museu1:hover + .museu1PopUp {
+    display:block;
+}
+
+.museu2 img {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    height: 700px;
+    position: absolute;
+    margin-top: 0px;
+    margin-left: 40px;
+    z-index: -5;
+}
+
+.museu3 img {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    height: 700px;
+    position: absolute;
+    margin-top: 0px;
+    margin-left: 75px;
+    z-index: -5;
+  
+}
+
+.decorativePillars{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  z-index: 5;
+}
+
+.pillarH1 {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.pillarH1 image {
+  height: 550px;
   grid-column-start: 1;
   grid-column-end: 2;
   grid-row-start: 1;
   grid-row-end: 2;
+  z-index: 5;
+
 }
 
-.museu1 img {
-    width: 400px;
+.pillarF1 {
+  display: flex;
+  justify-content: flex-start;
 }
 
-.museuInfo1 {
+
+.pillarF1 image {
+  height: 650px;
+  position: absolute;
+  margin-top: 0px;
+  margin-left: 0px;
   grid-column-start: 2;
   grid-column-end: 3;
   grid-row-start: 1;
   grid-row-end: 2;
-  background-color:rgba(0, 0, 0, 0.3);
-  color: white;
+  z-index: 5;
+}
+
+.pillarF2 {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pillarF2 image {
+  height: 650px;
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  z-index: 5;
+}
+
+.pillarH2 {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pillarH2 image {
+  justify-self: right;
+  height: 650px;
+  grid-column-start: 4;
+  grid-column-end: 5;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  z-index: 5;
 }
