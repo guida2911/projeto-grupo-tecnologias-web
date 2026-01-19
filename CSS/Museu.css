@@ -4,159 +4,293 @@
 }
 
 body {
-    background-color: #8b7041;
+    background-color: #000000;
     margin: 0;
     padding: 0;
 }
 
-.grid-container{
-   display: grid;
-   grid-template-columns: 1fr 1fr 1fr;
-   grid-template-rows: 1fr;
+.upperBar {
+    position: fixed;
+    background-color: #400101;
+    color: #BFBFAA;
+    width: 200vw;
+    height: 50px;
+    z-index: 10;
+    position: fixed;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
-.museu1 img {
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    height: 700px;
-    position: absolute;
-    margin-top: 0px;
-    margin-left: 35px;
-    z-index: -5;
+#searchIcon {
+    height: 30px;
+    margin-right: 10px;
 }
 
-.museu1PopUp {
-    width: 100vw;
-    height: 100vh;
+.hiddenBar {
+    position: relative;
+    background-color: #400101;
+    color: #BFBFAA;
+    width: 200vw;
+    height: 50px;
+    z-index: 10;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
     position: absolute;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
+    position: fixed;
     display: none;
 }
 
-.museu1PopUpText {
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
+#searchText {
+    height: 30px;
+    border-radius: 15px;
     font-family: Playfair_Display;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 2;
+    background-color: #1e0000;
+    padding: 0;
+    border: none;
+    color: #BFBFAA;
+    position: fixed;
 }
 
-.museu1PopUpText h2 {
+::placeholder {
+   text-align: center; 
+   font-size: medium;
+   color: #BFBFAA;
+}
+
+.searchSpace {
+    background-color: #1e0000;
+    color: #BFBFAA;
+    font-family: Playfair_Display;
+    width: 200vw;
+    height: 300px;
+    margin-top: 50px;
+    position: absolute;
+}
+
+.grid-container{
+    width: 200vw;
+    height: 100vh;
+    white-space: nowrap;    
+    overflow-x: auto;
+    overflow-y: hidden;
+    z-index: -5px;
+}
+
+.museu1 {
+    height: 100vh;
+    float: none;
+    display: inline-block;
     margin-left: 50px;
-    margin-top: 400px;
+    margin-right: -4px;
+    z-index: -5;
 }
 
-.museu1PopUpText p {
-    margin-left: 50px;
+.museu1 img {
+    width: 400px;
+    height: 100vh;
+    z-index: -5px;
+    margin-right: 100px;
 }
 
-#m1Btn {
-    width: 100px;
-    height: 50px;
-    border-radius: 20px;
-    margin-left: 600px;
+.museu1PopUp {
+    height: 100px;
+    width: 25rem;
+    background-color: #BFBFAA;
+    color: #400101;
+    font-family: Playfair_Display;
+    font-size: x-large;
+    bottom: 0;
+    z-index: -5px;
+    text-align: center;
+    position: absolute;
+    /* display: none; */
 }
 
-.museu1:hover + .museu1PopUp {
-    display:block;
+.museu1PopUp p {
+    text-align: center;
+    justify-self: center;
+}
+
+/* .museu1:hover + .museu1PopUp {
+    display: block;
+}
+
+.museu1PopUp:hover {
+    display: block;
+} */
+
+.museu2 {
+    height: 100vh;
+    float: none;
+    display: inline-block;
+    margin-right: -4px;
 }
 
 .museu2 img {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    height: 700px;
+    width: 400px;
+    height: 100vh;
+    z-index: -5px;
+    margin-right: 100px;
+}
+
+.museu2PopUp {
+    height: 100px;
+    width: 25rem;
+    background-color: #BFBFAA;
+    color: #400101;
+    font-family: Playfair_Display;
+    font-size: x-large;
+    bottom: 0;
+    margin-inline: auto;
+    text-align: center;
     position: absolute;
-    margin-top: 0px;
-    margin-left: 40px;
-    z-index: -5;
+}
+
+.museu2PopUp p {
+    text-align: center;
+    justify-self: center;
+}
+
+.museu3 {
+    width: 600px;
+    height: 100vh;
+    float: none;
+    display: inline-block;
+    margin-right: -4px;
 }
 
 .museu3 img {
-    grid-column-start: 3;
-    grid-column-end: 4;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    height: 700px;
+    width: 400px;
+    height: 100vh;
+    z-index: -5px;
+    margin-right: 100px;
+}
+
+.museu3PopUp {
+    height: 100px;
+    width: 25rem;
+    background-color: #BFBFAA;
+    color: #400101;
+    font-family: Playfair_Display;
+    font-size: x-large;
+    bottom: 0;
+    text-align: center;
     position: absolute;
-    margin-top: 0px;
-    margin-left: 75px;
-    z-index: -5;
-  
+}
+
+.museu3PopUp p {
+    text-align: center;
+    justify-self: center;
+}
+
+.museu4 {
+    width: 600px;
+    height: 100vh;
+    float: none;
+    display: inline-block;
+    margin-right: -4px;
+}
+
+.museu4 img {
+    width: 400px;
+    height: 100vh;
+    z-index: -5px;
+    margin-right: 50px;
+}
+
+.museu4PopUp {
+    height: 100px;
+    width: 25rem;
+    background-color: #BFBFAA;
+    color: #400101;
+    font-family: Playfair_Display;
+    font-size: x-large;
+    bottom: 0;
+    text-align: center;
+    position: absolute;
+}
+
+.museu4PopUp p {
+    text-align: center;
+    justify-self: center;
+}
+
+.museu5 {
+    width: 600px;
+    height: 100vh;
+    float: none;
+    display: inline-block;
+    margin-right: -4px;
+}
+
+.museu5 img {
+    width: 400px;
+    height: 100vh;
+    z-index: -5px;
+    margin-right: 50px;
+}
+
+.museu5PopUp {
+    height: 100px;
+    width: 25rem;
+    background-color: #BFBFAA;
+    color: #400101;
+    font-family: Playfair_Display;
+    font-size: x-large;
+    bottom: 0;
+    text-align: center;
+    position: absolute;
+}
+
+.museu5PopUp p {
+    text-align: center;
+    justify-self: center;
 }
 
 .decorativePillars{
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr;
-  z-index: 5;
+   display: flex;
+   flex-direction: column;
+   width: 200vw;
+   height: 100vh;
+   white-space: nowrap;    
+   overflow-x: auto;
+   overflow-y: hidden;
+   z-index: 5;
+   position: fixed;
 }
 
 .pillarH1 {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.pillarH1 image {
-  height: 550px;
-  grid-column-start: 1;
-  grid-column-end: 2;
-  grid-row-start: 1;
-  grid-row-end: 2;
-  z-index: 5;
-
+   height: 100vh;
+   float: none;
+   display: inline-block;
+   margin-right: -4px;
+   z-index: 5;
 }
 
 .pillarF1 {
-  display: flex;
-  justify-content: flex-start;
-}
-
-
-.pillarF1 image {
-  height: 650px;
-  position: absolute;
-  margin-top: 0px;
-  margin-left: 0px;
-  grid-column-start: 2;
-  grid-column-end: 3;
-  grid-row-start: 1;
-  grid-row-end: 2;
-  z-index: 5;
+   height: 100vh;
+   float: none;
+   display: inline-block;
+   margin-right: -4px;
+   z-index: 5;
 }
 
 .pillarF2 {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.pillarF2 image {
-  height: 650px;
-  grid-column-start: 3;
-  grid-column-end: 4;
-  grid-row-start: 1;
-  grid-row-end: 2;
-  z-index: 5;
+   height: 100vh;
+   float: none;
+   display: inline-block;
+   margin-right: -4px;
+   z-index: 5;
 }
 
 .pillarH2 {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.pillarH2 image {
-  justify-self: right;
-  height: 650px;
-  grid-column-start: 4;
-  grid-column-end: 5;
-  grid-row-start: 1;
-  grid-row-end: 2;
-  z-index: 5;
+   height: 100vh;
+   float: none;
+   display: inline-block;
+   margin-right: -4px;
+   z-index: 5;
 }
