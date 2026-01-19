@@ -1,0 +1,77 @@
+@font-face {
+    font-family: Playfair_Display;
+    src: url(/EXTRA/Fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf);
+}
+
+
+body{
+    background-color: #2a0000;
+    font-family: Playfair_Display;
+    color: #bfbfaa;
+    padding: 0;
+    margin: 0;
+}
+
+.container{
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+}
+
+.title {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    background-color: #400101;
+}
+
+.perfil {
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 5;
+    background-color: #400101;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.perfil p {
+    margin-top: 10px;
+}
+
+#loginPic {
+    width: 200px;
+    margin-top: 50px;
+    position: absolute;
+}
+
+.gosto {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    font-weight: bold;
+    font-size: large;
+}
+
+.comentario {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    font-weight: bold;
+    font-size: large;
+}
+
+.bilhete {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 4;
+    grid-row-end: 5;
+    font-weight: bold;
+    font-size: large;
+}
