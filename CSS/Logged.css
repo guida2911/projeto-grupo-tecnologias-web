@@ -5,7 +5,7 @@
 
 
 body{
-    background-color: #2a0000;
+    background-color: #380000;
     font-family: Playfair_Display;
     color: #bfbfaa;
     padding: 0;
@@ -25,7 +25,7 @@ body{
     grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 2;
-    background-color: #400101;
+    margin-left: 25px;
 }
 
 .perfil {
@@ -56,6 +56,7 @@ body{
     grid-row-end: 3;
     font-weight: bold;
     font-size: large;
+    margin-left: 50px;
 }
 
 .comentario {
@@ -65,6 +66,7 @@ body{
     grid-row-end: 4;
     font-weight: bold;
     font-size: large;
+    margin-left: 50px;
 }
 
 .bilhete {
@@ -74,4 +76,5 @@ body{
     grid-row-end: 5;
     font-weight: bold;
     font-size: large;
+    margin-left: 50px;
 }

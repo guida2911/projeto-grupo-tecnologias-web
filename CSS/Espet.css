@@ -92,28 +92,28 @@ main {
     align-items: flex-start;
 }
 
-.museu1 {
+.espet1 {
     height: 100vh;
 }
 
-.museu1 img {
+.espet1 img {
     width: 400px;
     height: 100vh;
     margin-top: 20px;
     margin-left: 50px;
 }
 
-.museu1Texto {
+.espet1Texto {
     margin-top: 150px;
     margin-left: 150px;
 }
 
-.museu1Texto p {
+.espet1Texto p {
     margin-top: 75px;
     font-size: large;
 }
 
-.museu1Texto p + p {
+.espet1Texto p + p {
     margin-top: 8px;
     margin-bottom: 50px;
 }
@@ -217,28 +217,28 @@ main {
     align-items: flex-start;
 }
 
-.museu2 {
+.espet2 {
     height: 100vh;
 }
 
-.museu2 img {
+.espet2 img {
     width: 400px;
     height: 100vh;
     margin-top: 20px;
     margin-left: 50px;
 }
 
-.museu2Texto {
+.espet2Texto {
     margin-top: 150px;
     margin-left: 150px;
 }
 
-.museu2Texto p {
+.espet2Texto p {
     margin-top: 75px;
     font-size: large;
 }
 
-.museu2Texto p + p {
+.espet2Texto p + p {
     margin-top: 8px;
     margin-bottom: 50px;
 }
@@ -250,28 +250,28 @@ main {
     align-items: flex-start;
 }
 
-.museu3 {
+.espet3 {
     height: 100vh;
 }
 
-.museu3 img {
+.espet3 img {
     width: 400px;
     height: 100vh;
     margin-top: 20px;
     margin-left: 50px;
 }
 
-.museu3Texto {
+.espet3Texto {
     margin-top: 150px;
     margin-left: 150px;
 }
 
-.museu3Texto p {
+.espet3Texto p {
     margin-top: 75px;
     font-size: large;
 }
 
-.museu3Texto p + p {
+.espet3Texto p + p {
     margin-top: 8px;
     margin-bottom: 50px;
 }
@@ -283,28 +283,28 @@ main {
     align-items: flex-start;
 }
 
-.museu4 {
+.espet4 {
     height: 100vh;
 }
 
-.museu4 img {
+.espet4 img {
     width: 400px;
     height: 100vh;
     margin-top: 20px;
     margin-left: 50px;
 }
 
-.museu4Texto {
+.espet4Texto {
     margin-top: 150px;
     margin-left: 150px;
 }
 
-.museu4Texto p {
+.espet4Texto p {
     margin-top: 75px;
     font-size: large;
 }
 
-.museu4Texto p + p {
+.espet4Texto p + p {
     margin-top: 8px;
     margin-bottom: 50px;
 }
@@ -316,28 +316,28 @@ main {
     align-items: flex-start;
 }
 
-.museu5 {
+.espet5 {
     height: 100vh;
 }
 
-.museu5 img {
+.espet5 img {
     width: 400px;
     height: 100vh;
     margin-top: 20px;
     margin-left: 50px;
 }
 
-.museu5Texto {
+.espet5Texto {
     margin-top: 150px;
     margin-left: 150px;
 }
 
-.museu5Texto p {
+.espet5Texto p {
     margin-top: 75px;
     font-size: large;
 }
 
-.museu5Texto p + p {
+.espet5Texto p + p {
     margin-top: 8px;
     margin-bottom: 50px;
 }

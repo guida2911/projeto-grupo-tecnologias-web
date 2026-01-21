@@ -92,28 +92,28 @@ main {
     align-items: flex-start;
 }
 
-.museu1 {
+.expo1 {
     height: 100vh;
 }
 
-.museu1 img {
+.expo1 img {
     width: 400px;
     height: 100vh;
     margin-top: 20px;
     margin-left: 50px;
 }
 
-.museu1Texto {
+.expo1Texto {
     margin-top: 150px;
     margin-left: 150px;
 }
 
-.museu1Texto p {
+.expo1Texto p {
     margin-top: 75px;
     font-size: large;
 }
 
-.museu1Texto p + p {
+.expo1Texto p + p {
     margin-top: 8px;
     margin-bottom: 50px;
 }
@@ -217,28 +217,28 @@ main {
     align-items: flex-start;
 }
 
-.museu2 {
+.expo2 {
     height: 100vh;
 }
 
-.museu2 img {
+.expo2 img {
     width: 400px;
     height: 100vh;
     margin-top: 20px;
     margin-left: 50px;
 }
 
-.museu2Texto {
+.expo2Texto {
     margin-top: 150px;
     margin-left: 150px;
 }
 
-.museu2Texto p {
+.expo2Texto p {
     margin-top: 75px;
     font-size: large;
 }
 
-.museu2Texto p + p {
+.expo2Texto p + p {
     margin-top: 8px;
     margin-bottom: 50px;
 }
@@ -250,28 +250,28 @@ main {
     align-items: flex-start;
 }
 
-.museu3 {
+.expo3 {
     height: 100vh;
 }
 
-.museu3 img {
+.expo3 img {
     width: 400px;
     height: 100vh;
     margin-top: 20px;
     margin-left: 50px;
 }
 
-.museu3Texto {
+.expo3Texto {
     margin-top: 150px;
     margin-left: 150px;
 }
 
-.museu3Texto p {
+.expo3Texto p {
     margin-top: 75px;
     font-size: large;
 }
 
-.museu3Texto p + p {
+.expo3Texto p + p {
     margin-top: 8px;
     margin-bottom: 50px;
 }
@@ -283,28 +283,28 @@ main {
     align-items: flex-start;
 }
 
-.museu4 {
+.expo4 {
     height: 100vh;
 }
 
-.museu4 img {
+.expo4 img {
     width: 400px;
     height: 100vh;
     margin-top: 20px;
     margin-left: 50px;
 }
 
-.museu4Texto {
+.expo4Texto {
     margin-top: 150px;
     margin-left: 150px;
 }
 
-.museu4Texto p {
+.expo4Texto p {
     margin-top: 75px;
     font-size: large;
 }
 
-.museu4Texto p + p {
+.expo4Texto p + p {
     margin-top: 8px;
     margin-bottom: 50px;
 }
@@ -316,28 +316,28 @@ main {
     align-items: flex-start;
 }
 
-.museu5 {
+.expo5 {
     height: 100vh;
 }
 
-.museu5 img {
+.expo5 img {
     width: 400px;
     height: 100vh;
     margin-top: 20px;
     margin-left: 50px;
 }
 
-.museu5Texto {
+.expo5Texto {
     margin-top: 150px;
     margin-left: 150px;
 }
 
-.museu5Texto p {
+.expo5Texto p {
     margin-top: 75px;
     font-size: large;
 }
 
-.museu5Texto p + p {
+.expo5Texto p + p {
     margin-top: 8px;
     margin-bottom: 50px;
 }

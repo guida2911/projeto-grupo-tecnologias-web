@@ -1,93 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Space</title>
-    <link rel="stylesheet" type="text/css" href="/CSS/Museu.css"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Art Space</title>
+  <link rel="stylesheet" type="text/css" href="/CSS/Museu.css">
 </head>
+
 <body>
-    
-    <main>
-      <section class="searchBar">
+  <main>
+    <section class="searchBar">
 
-        <div class="upperBar">
-          <img src="/EXTRA/searchIcon.png" id="searchIcon" alt="Icon de pesquisa">
-        </div>
+      <div class="bar">
+        <p id="searchTitle" onclick="MainPage()">Art Space</p>
+        <img src="/EXTRA/searchIcon.png" id="searchIcon" alt="Icon de pesquisa">
+        <input type="text" placeholder="Search" id="searchText">
+      </div>
 
-        <!-- <div class="hiddenBar">
-          <img src="/EXTRA/searchIcon.png" id="searchIcon" alt="Icon de pesquisa">
-          <input type="text" placeholder="Search" id="searchText">
-        </div> -->
+      <div class="searchSpace"></div>
 
-        <!-- <div class="searchSpace"></div> -->
+    </section>
 
-      </section>
+    <section>
 
-      <section class="grid-container">
+      <img id="pillar1" src="/EXTRA/PillarsHalf2.png" alt="Imagem cortada de um pilar decorativo do website.">
+      <img id="pillar2" src="/EXTRA/PillarFull.png" alt="Imagem de um pilar decorativo do website.">
 
+      <div id="container1">
         <div class="museu1" onclick="Museum1()">
           <img src="/EXTRA/Museum/m1.png" alt="Imagem do Museu do Louvre">
-          <div class="museu1PopUp"><p><b>Louvre Museum</b></p></div>
+        </div>
+        <div class="museu1Texto">
+          <h1> Louvre Museum</h1>
+          <p>The Louvre Museum is the world's largest and most visited art museum, <br>
+            housed in a former royal palace on the Seine River,
+            famous for iconic works like the Mona Lisa,<br> Venus de Milo and Winged Victory of Samothrace,
+            showcasing art from ancient civilizations <br>to the mid-19th century
+            through its extensive departments like Egyptian, Greek, Roman,<br> Paintings,
+            and Islamic Art.</p>
+          <p><u>Location:</u>Paris, France</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
         </div>
 
+         <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+        </div>
+      </div>
+
+      <div id="container2">
         <div class="museu2" onclick="Museum2()">
-          <img src="/EXTRA/Museum/m2.png" alt="Imagem do Museu Nacional de Arte da China">
-          <div class="museu2PopUp"><p><b>Nacional Art Museum of China</b></p></div>
+          <img src="/EXTRA/Museum/m2.png" alt="Imagem do Museu do Louvre">
         </div>
+        <div class="museu2Texto">
+          <h1> Nacional Art Museum</h1>
+          <p>The National Art Museum of China, also known as NAMOC is China's premier <br>
+            institution for modern and contemporary plastic arts, <br>
+            featuring a collection of over 100,000 works by Chinese masters <br>
+            from the late 19th century onward, housed in a distinctive building <br>
+            with traditional Chinese architectural elements like yellow glazed tiles and pavilions, <br>
+            serving as a cultural landmark for exhibiting, collecting, researching,<br>
+            and educating on Chinese art history and development, with a sculpture park<br>
+            and international exchanges adding to its scope. </p>
+          <p><u>Location:</u>Beijing, China</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+         <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+        </div>
+      </div>
+
+      <div id="container3">
         <div class="museu3" onclick="Museum3()">
-          <img src="/EXTRA/Museum/m3.png" alt="Imagem do Museu do Vaticano">
-          <div class="museu3PopUp"><p><b> Vatican Museum</b></p></div>
+          <img src="/EXTRA/Museum/m3.png" alt="Imagem do Museu do Louvre">
         </div>
-        
+        <div class="museu3Texto">
+          <h1> Vatican Museum</h1>
+          <p>The Vatican Museums are a vast complex in Vatican City housing<br>
+            immense art and historical collections amassed by popes,<br>
+            featuring masterpieces like Michelangelo's Sistine Chapel and Raphael's Rooms,<br>
+            showcasing Renaissance art, Roman sculptures, Egyptian artifacts, and more,<br>
+            offering a journey through human history and faith, attracting millions annually<br>
+            to its 54 galleries filled with 70,000 works,<br>
+            including significant ethnographic collections. </p>
+          <p><u>Location:</u>Vatican City, Vatican</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+         <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+        </div>
+      </div>
+
+      <div id="container4">
         <div class="museu4" onclick="Museum4()">
           <img src="/EXTRA/Museum/m4.png" alt="Imagem do Museu Britânico">
-          <div class="museu4PopUp"><p><b> British Museum</b></p></div>
+        </div>
+        <div class="museu4Texto">
+          <h1> British Museum</h1>
+          <p>The British Museum in London is a world-renowned public museum housing<br>
+            vast collections of human history, art, and culture, featuring millions of<br>
+            artifacts from across the globe, including iconic items like the Rosetta Stone<br>
+            and Parthenon Sculptures, showcasing two million years of history with free entry<br>
+            and highlighting global civilizations in a landmark building with Europe's largest<br>
+            covered public square, the Queen Elizabeth II Great Court. </p>
+          <p><u>Location:</u>London, England</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
         </div>
 
+         <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+        </div>
+      </div>
+
+      <div id="container5">
         <div class="museu5" onclick="Museum5()">
-          <img src="/EXTRA/Museum/m5.png" alt="Imagem do Museu metropolitano de Arte">
-          <div class="museu5PopUp"><p><b> Metropolitan Museum of Art</b></p></div>
+          <img src="/EXTRA/Museum/m5.png" alt="Imagem do Museu Metropolitano de arte">
+        </div>
+        <div class="museu5Texto">
+          <h1> Metropolitan Museum of Art</h1>
+          <p>The Metropolitan Museum of Art (The Met) in New York City is the largest art<br>
+            museum in the U.S., housing over two million works spanning 5,000 years of world history,<br>
+            from antiquity to the present, across 17 departments like Egyptian art, European paintings,<br>
+            and Islamic art, with locations including The Met Fifth Avenue and The Met Cloisters,<br>
+            connecting people to creativity, knowledge, and cultures. </p>
+          <p><u>Location:</u>New York, USA</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
         </div>
 
-      </section>
-
-      <section class="decorativePillars">
-
-        <div class="pillarH1">
-          <img src="/EXTRA/PillarsHalf2.png" alt="Imagem cortada de um pilar decorativo do website.">
+         <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
         </div>
+      </div>
 
-        <div class="pillarF1">
-          <img src="/EXTRA/PillarFull.png" alt="Imagem de um pilar decorativo do website.">
-        </div>
 
-        <div class="pillarF2">
-          <img src="/EXTRA/PillarFull.png" alt="Imagem de um pilar decorativo do website.">
-        </div>
-
-        <div class="pillarH2">
-          <img src="/EXTRA/PillarsHalf1.png" alt="Imagem cortada de um pilar decorativo do website.">
-        </div>
-
-         <div class="pillarH1">
-          <img src="/EXTRA/PillarsHalf2.png" alt="Imagem cortada de um pilar decorativo do website.">
-        </div>
-
-        <div class="pillarF1">
-          <img src="/EXTRA/PillarFull.png" alt="Imagem de um pilar decorativo do website.">
-        </div>
-
-        <div class="pillarF2">
-          <img src="/EXTRA/PillarFull.png" alt="Imagem de um pilar decorativo do website.">
-        </div>
-
-        <div class="pillarH2">
-          <img src="/EXTRA/PillarsHalf1.png" alt="Imagem cortada de um pilar decorativo do website.">
-        </div>
-
-      </section>
-
-    </main>
+    </section>
+  </main>
 </body>
+
 </html>

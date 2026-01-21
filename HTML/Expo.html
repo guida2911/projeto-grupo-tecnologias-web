@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Art Space</title>
+  <link rel="stylesheet" type="text/css" href="/CSS/Expo.css">
+</head>
+
+<body>
+  <main>
+    <section class="searchBar">
+
+      <div class="bar">
+        <p id="searchTitle" onclick="MainPage()">Art Space</p>
+        <img src="/EXTRA/searchIcon.png" id="searchIcon" alt="Icon de pesquisa">
+        <input type="text" placeholder="Search" id="searchText">
+      </div>
+
+      <div class="searchSpace"></div>
+
+    </section>
+
+    <section>
+
+      <img id="pillar1" src="/EXTRA/PillarsHalf2.png" alt="Imagem cortada de um pilar decorativo do website.">
+      <img id="pillar2" src="/EXTRA/PillarFull.png" alt="Imagem de um pilar decorativo do website.">
+
+      <div id="container1">
+
+        <div class="expo1" onclick="Expo1()">
+          <img src="/EXTRA/Exhibition/ex1.png" alt="Imagem da exposição 'Botticelli's Drawings'">
+        </div>
+
+        <div class="expo1Texto">
+          <h1>Botticelli's Drawings</h1>
+          <p>Botticelli Drawings exhibitions, like the landmark show at San Francisco's Legion of Honor,<br>
+            offer a rare look into the Renaissance master's creative process, <br>
+            showcasing his drawings—often unseen—alongside related paintings<br>
+            and manuscripts to reveal his artistic journey, <br>
+            from apprentice studies to final masterpieces, highlighting his mastery of line, <br>
+            innovative techniques, and evolving focus on religious themes<br>
+            influenced by figures like Savonarola, presenting an intimate view <br>
+            of his design skills and unparalleled graphic virtuosity. </p>
+          <p><u>Location:</u> Florence, Italy</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+        </div>
+      </div>
+
+      <div id="container2">
+        <div class="expo2" onclick="Expo2()">
+          <img src="/EXTRA/Exhibition/ex2.png" alt="Imagem da exposição 'Frans Hals'">
+        </div>
+
+        <div class="expo2Texto">
+          <h1>Frans Hals</h1>
+          <p>Frans Hals exhibitions, like the major 2023-2024 retrospectives,<br>
+            focus on his revolutionary, lifelike portraits, showcasing his rapid, <br>
+            expressive brushwork that captured personality, laughter, <br>
+            and the vibrancy of Dutch Golden Age life. <br>
+            These shows reunite dispersed family portraits, feature iconic works <br>
+            like "The Laughing Cavalier," and highlight Hals's influence on <br>
+            later artists (Impressionists), presenting him as a pioneer in dynamic,<br>
+            modern portraiture through thematic displays and chronological <br>
+            journeys through his evolving style.</p>
+          <p><u>Location:</u> Amsterdam, Netherlands</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+        </div>
+      </div>
+
+      <div id="container3">
+
+        <div class="expo3" onclick="Expo3()">
+          <img src="/EXTRA/Exhibition/ex3.png" alt="Imagem da exposição 'Rosana Paulino'">
+        </div>
+
+        <div class="expo3Texto">
+          <h1>Rosana Paulino's Amefricana</h1>
+          <p>The works to be exhibited address the history of slavery, <br>
+            with some phenotypic photos that the Swiss photographer Auguste Stahl <br>
+            took in the 19th century, of black women and men from the front, <br>
+            from the back and in profile, images that Paulino transposes onto canvas, <br>
+            cuts, and sutures. </p>
+          <p><u>Location:</u> Milan, Italy</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+        </div>
+      </div>
+
+      <div id="container4">
+
+        <div class="expo4" onclick="Expo4()">
+          <img src="/EXTRA/Exhibition/ex4.png" alt="Imagem da exposição 'Paris 1874'">
+        </div>
+
+        <div class="expo4Texto">
+          <h1>Paris 1874</h1>
+          <p>In Paris, 1874, a revolutionary art exhibition by the Société Anonyme<br>
+            (Anonymous Society) marked the birth of Impressionism,<br>
+            showcasing radical works by Monet, Renoir, Degas, Morisot,<br>
+            and others rejected by the official Salon, focusing on modern life, <br>
+            light, and fleeting impressions, a departure from tradition <br>
+            that scandalized critics but established a new avant-garde art movement.</p>
+          <p><u>Location:</u> Paris, France</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+        </div>
+      </div>
+
+      <div id="container5">
+
+        <div class="expo5" onclick="Expo5()">
+          <img src="/EXTRA/Exhibition/ex5.png" alt="Imagem da exposição 'Surrealism'">
+        </div>
+
+        <div class="expo5Texto">
+          <h1> Surrealism. Other Myths</h1>
+          <p>"Surrealism. Other Myths" exhibitions explore Surrealism as a global,<br>
+            evolving force, challenging its traditional boundaries by showcasing Polish<br>
+            and Eastern European artists alongside Western figures, highlighting dreams,<br>
+            the subconscious, and political engagement from the interwar period through <br>
+            the postwar era, featuring techniques like frottage and decalcomania, <br>
+            and connecting it to anti-colonialism and local struggles against authoritarianism. <br>
+            These shows reveal Surrealism's diverse expressions, <br>
+            from bizarre dreamscapes by the Artes Group to politically <br>
+            charged works addressing war and oppression, proving it a dynamic movement<br>
+            beyond its initial French context. </p>
+          <p><u>Location:</u> Athens, Greece</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

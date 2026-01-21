@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Art Space</title>
+  <link rel="stylesheet" type="text/css" href="/CSS/Espet.css">
+</head>
+
+<body>
+  <main>
+    <section class="searchBar">
+
+      <div class="bar">
+        <p id="searchTitle" onclick="MainPage()">Art Space</p>
+        <img src="/EXTRA/searchIcon.png" id="searchIcon" alt="Icon de pesquisa">
+        <input type="text" placeholder="Search" id="searchText">
+      </div>
+
+      <div class="searchSpace"></div>
+
+    </section>
+
+    <section>
+
+      <img id="pillar1" src="/EXTRA/PillarsHalf2.png" alt="Imagem cortada de um pilar decorativo do website.">
+      <img id="pillar2" src="/EXTRA/PillarFull.png" alt="Imagem de um pilar decorativo do website.">
+
+      <div id="container1">
+        <div class="espet1" onclick="Espet1()">
+          <img src="/EXTRA/LiveShows/es1.png" alt="Imagem do espetáculo 'Lago dos Cisnes'">
+        </div>
+        <div class="espet1Texto">
+          <h1> Swan Lake</h1>
+          <p>Swan Lake is a tragic ballet about Prince Siegfried,<br>
+        who falls in love with Princess Odette, a woman cursed <br>
+        by the evil sorcerer Von Rothbart to be a swan by day and human by night;<br>
+        the spell can only be broken by a vow of true love, <br>
+        but Siegfried is tricked into betraying Odette with the sorcerer's daughter.</p>
+          <p><u>Location:</u>Moscow, Russia</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider">
+        <a href="#container1">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container2">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container3">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container4">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container5">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+      </div>
+      </div>
+
+      <div id="container2">
+        <div class="espet2" onclick="Espet2()">
+          <img src="/EXTRA/LiveShows/es2.png" alt="Imagem do espetáculo 'Hamilton'">
+        </div>
+        <div class="espet2Texto">
+          <h1>Hamilton</h1>
+          <p>Hamilton is a revolutionary Broadway musical by Lin-Manuel Miranda<br>
+        that tells the story of American Founding Father Alexander Hamilton <br>
+        through a blend of hip-hop, jazz, R&B, and traditional show tunes,<br>
+        known for its diverse, multiracial cast representing "America then,<br>
+        as told by America now". It follows Hamilton's journey<br>
+        from impoverished orphan to influential statesman, <br>
+        detailing his rise in the American Revolution,<br>
+        his role as the first Treasury Secretary, and his famous rivalry with Aaron Burr,<br>
+        culminating in his tragic death in a duel.</p>
+          <p><u>Location:</u>Manhattan, USA</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider">
+        <a href="#container1">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container2">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container3">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container4">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container5">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+      </div>
+      </div>
+
+      <div id="container3">
+        <div class="espet3" onclick="Espet3()">
+          <img src="/EXTRA/LiveShows/es3.png" alt="Imagem do espetáculo 'Alladino no Gelo'">
+        </div>
+        <div class="espet3Texto">
+          <h1> Alladin On Ice</h1>
+          <p>Aladdin on Ice is a spectacular live show blending figure skating,<br>
+        acrobatics, and circus arts with the classic tale of Aladdin, <br>
+        featuring dazzling costumes, vibrant sets, and popular songs <br>
+        to bring the magical story of Agrabah, the Genie,<br>
+        and "A Whole New World" to life on synthetic or real ice for family audiences. <br>
+        Productions often combine professional skaters with local talent <br>
+        and incorporate advanced visual effects, showcasing complex stunts <br>
+        like the flying carpet and fire juggling alongside graceful choreography.</p>
+          <p><u>Location:</u>Lisbon, Portugal</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider">
+        <a href="#container1">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container2">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container3">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container4">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container5">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+      </div>
+      </div>
+
+      <div id="container4">
+        <div class="espet4" onclick="Espet4()">
+          <img src="/EXTRA/LiveShows/es4.png" alt="Imagem do espetáculo'Nutcracker'">
+        </div>
+        <div class="espet4Texto">
+          <h1>Nutcracker</h1>
+          <p>The Nutcracker is a magical Christmas ballet by Tchaikovsky,<br>
+        telling the story of a young girl named Clara who receives an<br>
+        enchanted Nutcracker doll on Christmas Eve; it comes to life, <br>
+        battles the evil Mouse King, and whisks her away to the fantastical <br>
+        Land of Sweets for a celebration of dances, all set to iconic classical music. </p>
+          <p><u>Location:</u>Washington, USA</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider">
+        <a href="#container1">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container2">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container3">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container4">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container5">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+      </div>
+      </div>
+
+      <div id="container5">
+        <div class="espet5" onclick="Espet5()">
+          <img src="/EXTRA/LiveShows/es5.png" alt="Imagem do espetáculo 'Fantasma da Opera'">
+        </div>
+        <div class="espet5Texto">
+          <h1> The Phantom of the Opera</h1>
+          <p>The Phantom of the Opera is a classic romantic musical about a <br>
+            disfigured musical genius haunting the Paris Opera House who<br>
+             becomes obsessed with a young soprano, Christine Daaé, <br>
+             and schemes to make her a star, leading to a tragic love triangle <br>
+             with her childhood sweetheart, Raoul, <br>
+             and dramatic events like a massive chandelier crash. </p>
+          <p><u>Location:</u>London, England</p>
+
+          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
+
+          <div id="modal-example" class="modal">
+
+            <a href="#" class="modal-backdrop"></a>
+
+            <div class="modal-content">
+              <h2>Tickets</h2>
+              <form>
+                First Name:<br><input type="text" name="firstname" required><br>
+                Last Name:<br><input type="text" name="lastname" required><br>
+                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                Time:<br>
+                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                <label for="day">Available Dates</label><br>
+                <select name="day" id="day">
+                  <option value="jan29">January 29th</option>
+                  <option value="feb3">February 3th</option>
+                  <option value="feb18">February 18th</option>
+                  <option value="mar8">March 8th</option>
+                </select><br><br>
+                Tickets:<br>
+                <input type="radio" name="hour" value="1" checked> 1
+                <input type="radio" name="hour" value="2"> 2
+                <input type="radio" name="hour" value="3"> 3
+                <input type="radio" name="hour" value="4"> 4
+                <input type="radio" name="hour" value="5"> 5
+                <input type="radio" name="hour" value="6"> 6
+                <input type="Submit" value="Confirm" class="modal-confirm">
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider">
+        <a href="#container1">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container2">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container3">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container4">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+        <a href="#container5">
+          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+        </a>
+      </div>
+      </div>
+
+
+    </section>
+  </main>
+</body>
+
+</html>
