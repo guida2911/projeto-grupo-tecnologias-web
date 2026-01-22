@@ -211,6 +211,10 @@ main {
     width: 40px;
 }
 
+#addModal {
+    margin-right: 5px;
+}
+
 #container2 {
     display: flex;
     flex-direction: row;
