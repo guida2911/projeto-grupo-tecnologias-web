@@ -4,8 +4,8 @@
 }
 
 body {
-    background-color: #380000;
-    color: #BFBFAA;
+    background-image: url("/EXTRA/background.png");
+    color: white;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -104,6 +104,7 @@ main {
 }
 
 .expo1Texto {
+    color: white;
     margin-top: 150px;
     margin-left: 150px;
 }
@@ -229,6 +230,7 @@ main {
 }
 
 .expo2Texto {
+    color: white;
     margin-top: 150px;
     margin-left: 150px;
 }
@@ -262,6 +264,7 @@ main {
 }
 
 .expo3Texto {
+    color: white;
     margin-top: 150px;
     margin-left: 150px;
 }
@@ -295,6 +298,7 @@ main {
 }
 
 .expo4Texto {
+    color: white;
     margin-top: 150px;
     margin-left: 150px;
 }
@@ -328,6 +332,7 @@ main {
 }
 
 .expo5Texto {
+    color: white;
     margin-top: 150px;
     margin-left: 150px;
 }

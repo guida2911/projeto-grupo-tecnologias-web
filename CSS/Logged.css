@@ -5,7 +5,8 @@
 
 
 body{
-    background-color: #380000;
+    background-image: url("/EXTRA/background.png");
+    color: white;
     font-family: Playfair_Display;
     color: #bfbfaa;
     padding: 0;

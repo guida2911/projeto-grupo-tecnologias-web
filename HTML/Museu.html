@@ -45,19 +45,71 @@
         </div>
         <div class="museu1Texto">
           <h1> Louvre Museum</h1>
-          <p>The Louvre Museum is the world's largest and most visited art museum, <br>
+          <p>The Louvre Museum is the world's largest and most visited art museum,<br>
             housed in a former royal palace on the Seine River,
-            famous for iconic works like the Mona Lisa,<br> Venus de Milo and Winged Victory of Samothrace,
-            showcasing art from ancient civilizations <br>to the mid-19th century
-            through its extensive departments like Egyptian, Greek, Roman,<br> Paintings,
-            and Islamic Art.</p>
+            famous for iconic works like the Mona Lisa,<br> 
+            Venus de Milo and Winged Victory of Samothrace, showcasing art from ancient civilizations<br>
+            to the mid-19th century through its extensive departments like Egyptian, Greek, Roman,<br> 
+            Paintings, and Islamic Art.</p>
           <p><u>Location:</u>Paris, France</p>
 
           <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#ticketModal">
             Buy Tickets
           </button>
+        </div>
 
-          <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="ticketModalLabel"
+        <div class="slider">
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal">
+            Add
+          </button>
+
+          <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Add</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
+                    Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
+                    Text:<br><textarea id="museu_description" required></textarea>
+                  
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      </div>
+
+      <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="ticketModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -101,32 +153,6 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-
-          <button type="button" class="btn btn-dark" data-toggle="modal">
-            Add
-          </button>
-
-        </div>
-      </div>
-      </div>
 
       <div id="container2">
         <div class="museu2" onclick="Museum2()">
