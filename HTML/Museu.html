@@ -20,7 +20,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
     integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
     crossorigin="anonymous"></script>
-  
+
 
   <main>
     <section class="searchBar">
@@ -48,15 +48,11 @@
           <h1> Louvre Museum</h1>
           <p>The Louvre Museum is the world's largest and most visited art museum,<br>
             housed in a former royal palace on the Seine River,
-            famous for iconic works like the Mona Lisa,<br> 
+            famous for iconic works like the Mona Lisa,<br>
             Venus de Milo and Winged Victory of Samothrace, showcasing art from ancient civilizations<br>
-            to the mid-19th century through its extensive departments like Egyptian, Greek, Roman,<br> 
+            to the mid-19th century through its extensive departments like Egyptian, Greek, Roman,<br>
             Paintings, and Islamic Art.</p>
           <p><u>Location:</u>Paris, France</p>
-
-          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#ticketModal">
-            Buy Tickets
-          </button>
         </div>
 
         <div class="slider">
@@ -80,7 +76,7 @@
             Add
           </button>
 
-           <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+          <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -95,7 +91,91 @@
                     Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
                     Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
                     Text:<br><textarea id="museu_description" required></textarea>
-                  
+
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#ticketModal" id="ticketModalBtn">
+            Buy Tickets
+          </button>
+
+          <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Time:<br>
+                    <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                    <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                    <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                    <label for="day">Available Dates</label><br>
+                    <select name="day" id="day">
+                      <option value="jan29">January 29th</option>
+                      <option value="feb3">February 3th</option>
+                      <option value="feb18">February 18th</option>
+                      <option value="mar8">March 8th</option>
+                    </select><br><br>
+                    Tickets:<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5
+                    <input type="radio" name="hour" value="6"> 6
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#reviewModal" id="reviewModalBtn">
+            Review
+          </button>
+
+          <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Review (From 1 to 5):<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5<br>
+                    Leave a comment:<br>
+                    <textarea></textarea>
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -126,39 +206,6 @@
             and international exchanges adding to its scope. </p>
           <p><u>Location:</u>Beijing, China</p>
 
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
           </div>
         </div>
 
@@ -200,39 +247,6 @@
             including significant ethnographic collections. </p>
           <p><u>Location:</u>Vatican City, Vatican</p>
 
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
           </div>
         </div>
 
@@ -272,7 +286,7 @@
                     Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
                     Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
                     Text:<br><textarea id="museu_description" required></textarea>
-                  
+
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -299,39 +313,6 @@
             covered public square, the Queen Elizabeth II Great Court. </p>
           <p><u>Location:</u>London, England</p>
 
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
           </div>
         </div>
 
@@ -371,7 +352,7 @@
                     Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
                     Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
                     Text:<br><textarea id="museu_description" required></textarea>
-                  
+
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -397,39 +378,6 @@
             connecting people to creativity, knowledge, and cultures. </p>
           <p><u>Location:</u>New York, USA</p>
 
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
           </div>
         </div>
 
@@ -469,7 +417,7 @@
                     Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
                     Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
                     Text:<br><textarea id="museu_description" required></textarea>
-                  
+
                   </form>
                 </div>
                 <div class="modal-footer">
