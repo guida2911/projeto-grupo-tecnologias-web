@@ -20,12 +20,12 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
     integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
     crossorigin="anonymous"></script>
-    
+
   <main>
     <section class="searchBar">
 
       <div class="bar">
-        <p id="searchTitle" onclick="MainPage()">Art Space</p>
+        <a id="searchTitle" onclick="Main()">Art Space</a>
         <img src="/EXTRA/searchIcon.png" id="searchIcon" alt="Icon de pesquisa">
         <input type="text" placeholder="Search" id="searchText">
       </div>
@@ -46,10 +46,10 @@
         <div class="espet1Texto">
           <h1> Swan Lake</h1>
           <p>Swan Lake is a tragic ballet about Prince Siegfried,<br>
-        who falls in love with Princess Odette, a woman cursed <br>
-        by the evil sorcerer Von Rothbart to be a swan by day and human by night;<br>
-        the spell can only be broken by a vow of true love, <br>
-        but Siegfried is tricked into betraying Odette with the sorcerer's daughter.</p>
+            who falls in love with Princess Odette, a woman cursed <br>
+            by the evil sorcerer Von Rothbart to be a swan by day and human by night;<br>
+            the spell can only be broken by a vow of true love, <br>
+            but Siegfried is tricked into betraying Odette with the sorcerer's daughter.</p>
           <p><u>Location:</u>Moscow, Russia</p>
 
           <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
@@ -89,22 +89,53 @@
         </div>
 
         <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
+            Add
+          </button>
+
+           <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Add</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
+                    Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
+                    Text:<br><textarea id="museu_description" required></textarea>
+                  
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <div id="container2">
@@ -114,14 +145,14 @@
         <div class="espet2Texto">
           <h1>Hamilton</h1>
           <p>Hamilton is a revolutionary Broadway musical by Lin-Manuel Miranda<br>
-        that tells the story of American Founding Father Alexander Hamilton <br>
-        through a blend of hip-hop, jazz, R&B, and traditional show tunes,<br>
-        known for its diverse, multiracial cast representing "America then,<br>
-        as told by America now". It follows Hamilton's journey<br>
-        from impoverished orphan to influential statesman, <br>
-        detailing his rise in the American Revolution,<br>
-        his role as the first Treasury Secretary, and his famous rivalry with Aaron Burr,<br>
-        culminating in his tragic death in a duel.</p>
+            that tells the story of American Founding Father Alexander Hamilton <br>
+            through a blend of hip-hop, jazz, R&B, and traditional show tunes,<br>
+            known for its diverse, multiracial cast representing "America then,<br>
+            as told by America now". It follows Hamilton's journey<br>
+            from impoverished orphan to influential statesman, <br>
+            detailing his rise in the American Revolution,<br>
+            his role as the first Treasury Secretary, and his famous rivalry with Aaron Burr,<br>
+            culminating in his tragic death in a duel.</p>
           <p><u>Location:</u>Manhattan, USA</p>
 
           <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
@@ -161,22 +192,53 @@
         </div>
 
         <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
+            Add
+          </button>
+
+          <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Add</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
+                    Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
+                    Text:<br><textarea id="museu_description" required></textarea>
+
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <div id="container3">
@@ -186,13 +248,13 @@
         <div class="espet3Texto">
           <h1> Alladin On Ice</h1>
           <p>Aladdin on Ice is a spectacular live show blending figure skating,<br>
-        acrobatics, and circus arts with the classic tale of Aladdin, <br>
-        featuring dazzling costumes, vibrant sets, and popular songs <br>
-        to bring the magical story of Agrabah, the Genie,<br>
-        and "A Whole New World" to life on synthetic or real ice for family audiences. <br>
-        Productions often combine professional skaters with local talent <br>
-        and incorporate advanced visual effects, showcasing complex stunts <br>
-        like the flying carpet and fire juggling alongside graceful choreography.</p>
+            acrobatics, and circus arts with the classic tale of Aladdin, <br>
+            featuring dazzling costumes, vibrant sets, and popular songs <br>
+            to bring the magical story of Agrabah, the Genie,<br>
+            and "A Whole New World" to life on synthetic or real ice for family audiences. <br>
+            Productions often combine professional skaters with local talent <br>
+            and incorporate advanced visual effects, showcasing complex stunts <br>
+            like the flying carpet and fire juggling alongside graceful choreography.</p>
           <p><u>Location:</u>Lisbon, Portugal</p>
 
           <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
@@ -232,22 +294,53 @@
         </div>
 
         <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
+            Add
+          </button>
+
+          <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Add</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
+                    Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
+                    Text:<br><textarea id="museu_description" required></textarea>
+
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
       </div>
 
       <div id="container4">
@@ -257,10 +350,10 @@
         <div class="espet4Texto">
           <h1>Nutcracker</h1>
           <p>The Nutcracker is a magical Christmas ballet by Tchaikovsky,<br>
-        telling the story of a young girl named Clara who receives an<br>
-        enchanted Nutcracker doll on Christmas Eve; it comes to life, <br>
-        battles the evil Mouse King, and whisks her away to the fantastical <br>
-        Land of Sweets for a celebration of dances, all set to iconic classical music. </p>
+            telling the story of a young girl named Clara who receives an<br>
+            enchanted Nutcracker doll on Christmas Eve; it comes to life, <br>
+            battles the evil Mouse King, and whisks her away to the fantastical <br>
+            Land of Sweets for a celebration of dances, all set to iconic classical music. </p>
           <p><u>Location:</u>Washington, USA</p>
 
           <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
@@ -300,22 +393,53 @@
         </div>
 
         <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
+            Add
+          </button>
+
+           <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Add</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
+                    Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
+                    Text:<br><textarea id="museu_description" required></textarea>
+                  
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <div id="container5">
@@ -326,10 +450,10 @@
           <h1> The Phantom of the Opera</h1>
           <p>The Phantom of the Opera is a classic romantic musical about a <br>
             disfigured musical genius haunting the Paris Opera House who<br>
-             becomes obsessed with a young soprano, Christine Daaé, <br>
-             and schemes to make her a star, leading to a tragic love triangle <br>
-             with her childhood sweetheart, Raoul, <br>
-             and dramatic events like a massive chandelier crash. </p>
+            becomes obsessed with a young soprano, Christine Daaé, <br>
+            and schemes to make her a star, leading to a tragic love triangle <br>
+            with her childhood sweetheart, Raoul, <br>
+            and dramatic events like a massive chandelier crash. </p>
           <p><u>Location:</u>London, England</p>
 
           <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
@@ -369,27 +493,59 @@
         </div>
 
         <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
+          <a href="#container1">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container2">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container3">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container4">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+          <a href="#container5">
+            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
+          </a>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
+            Add
+          </button>
+
+           <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Add</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
+                    Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
+                    Text:<br><textarea id="museu_description" required></textarea>
+                  
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
 
     </section>
   </main>
+  <script src="/Main.js"></script>
 </body>
 
 </html>

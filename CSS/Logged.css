@@ -21,6 +21,13 @@ body{
     grid-template-rows: 1fr 1fr 1fr 1fr;
 }
 
+#searchTitle {
+    margin-left: 5px;
+    margin-right: auto;
+    font-size: x-large;
+    font-weight: bold;
+}
+
 .title {
     grid-column-start: 1;
     grid-column-end: 4;

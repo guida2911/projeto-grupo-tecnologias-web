@@ -20,6 +20,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
     integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
     crossorigin="anonymous"></script>
+  
 
   <main>
     <section class="searchBar">
@@ -75,11 +76,11 @@
             <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
           </a>
 
-          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModal">
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
             Add
           </button>
 
-          <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+           <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -106,53 +107,8 @@
           </div>
 
         </div>
-      </div>
-      </div>
 
-      <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="ticketModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="ticketModalLabel">Modal title</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <h2>Tickets</h2>
-                  <!-- <form>
-                    First Name:<br><input type="text" name="firstname" required><br>
-                    Last Name:<br><input type="text" name="lastname" required><br>
-                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                    Time:<br>
-                    <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                    <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                    <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                    <label for="day">Available Dates</label><br>
-                    <select name="day" id="day">
-                      <option value="jan29">January 29th</option>
-                      <option value="feb3">February 3th</option>
-                      <option value="feb18">February 18th</option>
-                      <option value="mar8">March 8th</option>
-                    </select><br><br>
-                    Tickets:<br>
-                    <input type="radio" name="hour" value="1" checked> 1
-                    <input type="radio" name="hour" value="2"> 2
-                    <input type="radio" name="hour" value="3"> 3
-                    <input type="radio" name="hour" value="4"> 4
-                    <input type="radio" name="hour" value="5"> 5
-                    <input type="radio" name="hour" value="6"> 6
-                    <input type="Submit" value="Confirm" class="modal-confirm">
-                  </form> -->
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-dark">Confirm</button>
-                </div>
-              </div>
-            </div>
-          </div>
+      </div>
 
       <div id="container2">
         <div class="museu2" onclick="Museum2()">
@@ -226,32 +182,6 @@
           <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal">
             Add
           </button>
-
-          <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="addModalLabel">Add</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form>
-                    Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
-                    Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
-                    Text:<br><textarea id="museu_description" required></textarea>
-                  
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-dark">Confirm</button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -555,6 +485,8 @@
 
     </section>
   </main>
+
+  <script src="/Main.js"></script>
 </body>
 
 </html>
