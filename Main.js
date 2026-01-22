@@ -1,1530 +1,990 @@
-document.querySelector("#formLogin").addEventListener('submit', (event) => {
-    event.preventDefault();
-    Login();
-})
+(() => {
+  'use strict';
 
-document.querySelector("#formRegister").addEventListener('submit', (event) => {
-    event.preventDefault();
-    Register();
-})
+  /**
+   * Art Space – JavaScript “backend” (client-only)
+   *
+   * Features:
+   *  - Login + Register (localStorage)
+   *  - Navigation between pages
+   *  - Add cards (Museu / Expo / Espet) persisted in localStorage
+   *  - Search (suggestions + jump + dim non-matches)
+   *  - Likes + Tickets saved per user and shown in Logged.html
+   *
+   * This is a front-end demo. Do not use for real authentication.
+   */
 
-let comments = []
+  const APP_NAME = 'artspace';
 
-let museu_name = []
-let museu_description = []
-let museu_image = []
-let passwords = ["admin", "user"]
-let usernames = ["admin", "user"]
-let user_login_name; let user_login_pass
-let user_register_name; let user_register_confirm_name; let user_register_pass; let user_register_confirm_pass
+  const KEY = {
+    users: `${APP_NAME}_users`,
+    session: `${APP_NAME}_session`,
+    cards: (type) => `${APP_NAME}_cards_${type}`,
+    userData: (username) => `${APP_NAME}_userdata_${username}`,
+  };
 
-let userlogged = false; let accountlogged = ""
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-let register_verified = 1
+  const nowIso = () => new Date().toISOString();
 
-
-
-function Login(){
-  
-    user_login_name = document.querySelector("#login_name").value 
-    user_login_pass = document.querySelector("#login_pass").value
-    for(let i = 0;i<usernames.length;i++){
-        if(passwords[i] == user_login_pass && usernames[i] == user_login_name){
-            userlogged = true
-            accountlogged = usernames[i]
-            alert("Logged in to "+usernames[i]+"!")
-            console.log(usernames[i]);
-            Logged();
-            return(true);
-        } 
+  const safeJsonParse = (value, fallback) => {
+    try {
+      if (value == null) return fallback;
+      return JSON.parse(value);
+    } catch {
+      return fallback;
     }
-alert("Não existe conta com esse nome/pass!")
-return false;
-}
+  };
 
-function Register(){
-    user_register_name =  document.querySelector("#register_name").value
-    user_register_confirm_name = document.querySelector("#register_confirm_name").value 
-    user_register_pass = document.querySelector("#register_pass").value
-    user_register_confirm_pass = document.querySelector("#register_confirm_pass").value
-    if(user_register_name == user_register_confirm_name && user_register_pass == user_register_confirm_pass){
-    for(let i = 0;i<usernames.length;i++){
-        if(usernames[i] == user_register_name){
-           register_verified = 0
+  const store = {
+    get(key, fallback) {
+      return safeJsonParse(localStorage.getItem(key), fallback);
+    },
+    set(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    },
+    del(key) {
+      localStorage.removeItem(key);
+    },
+  };
+
+  const sessionStore = {
+    get(fallback) {
+      return safeJsonParse(sessionStorage.getItem(KEY.session), fallback);
+    },
+    set(value) {
+      sessionStorage.setItem(KEY.session, JSON.stringify(value));
+    },
+    del() {
+      sessionStorage.removeItem(KEY.session);
+    },
+  };
+
+  const auth = {
+    ensureDefaults() {
+      const existing = store.get(KEY.users, null);
+      if (Array.isArray(existing) && existing.length) return;
+
+      // Demo accounts
+      store.set(KEY.users, [
+        { username: 'admin', password: 'admin' },
+        { username: 'user', password: 'user' },
+      ]);
+    },
+
+    currentUser() {
+      const s = sessionStore.get(null);
+      return s && typeof s.username === 'string' ? s.username : null;
+    },
+
+    isLoggedIn() {
+      return !!auth.currentUser();
+    },
+
+    login(username, password) {
+      const users = store.get(KEY.users, []);
+      const found = users.find(
+        (u) => u.username === username && u.password === password
+      );
+      if (!found) return { ok: false, message: 'Nome ou password inválidos.' };
+      sessionStore.set({ username: found.username, loggedAt: nowIso() });
+      return { ok: true, message: `Sessão iniciada: ${found.username}` };
+    },
+
+    logout() {
+      sessionStore.del();
+    },
+
+    register(username, confirmUsername, password, confirmPassword) {
+      if (!username || !password) {
+        return { ok: false, message: 'Preencha nome e password.' };
+      }
+      if (username !== confirmUsername) {
+        return { ok: false, message: 'Os nomes não coincidem.' };
+      }
+      if (password !== confirmPassword) {
+        return { ok: false, message: 'As passwords não coincidem.' };
+      }
+
+      const users = store.get(KEY.users, []);
+      const exists = users.some((u) => u.username === username);
+      if (exists) {
+        return { ok: false, message: 'Já existe uma conta com esse nome.' };
+      }
+
+      users.push({ username, password });
+      store.set(KEY.users, users);
+
+      // Auto-login
+      sessionStore.set({ username, loggedAt: nowIso() });
+
+      return { ok: true, message: 'Conta criada com sucesso.' };
+    },
+  };
+
+  const userData = {
+    defaults() {
+      return { likes: [], comments: [], tickets: [] };
+    },
+
+    load(username) {
+      if (!username) return userData.defaults();
+      return store.get(KEY.userData(username), userData.defaults());
+    },
+
+    save(username, data) {
+      if (!username) return;
+      store.set(KEY.userData(username), data);
+    },
+
+    addLike(username, like) {
+      const data = userData.load(username);
+      const already = data.likes.some((l) => l.type === like.type && l.id === like.id);
+      if (already) return { ok: true, already: true };
+      data.likes.push({ ...like, createdAt: nowIso() });
+      userData.save(username, data);
+      return { ok: true, already: false };
+    },
+
+    addComment(username, comment) {
+      const data = userData.load(username);
+      data.comments.push({ ...comment, createdAt: nowIso() });
+      userData.save(username, data);
+      return { ok: true };
+    },
+
+    addTicket(username, ticket) {
+      const data = userData.load(username);
+      data.tickets.push({ ...ticket, createdAt: nowIso() });
+      userData.save(username, data);
+      return { ok: true };
+    },
+  };
+
+  const cards = {
+    list(type) {
+      return store.get(KEY.cards(type), []);
+    },
+
+    save(type, list) {
+      store.set(KEY.cards(type), list);
+    },
+
+    add(type, card) {
+      const list = cards.list(type);
+      list.push(card);
+      cards.save(type, list);
+      return card;
+    },
+  };
+
+  const nav = {
+    to(targetFile, hash = '') {
+      try {
+        const url = new URL(targetFile, window.location.href);
+        if (hash) url.hash = hash.startsWith('#') ? hash : `#${hash}`;
+        window.location.href = url.toString();
+      } catch {
+        // fallback
+        window.location.href = targetFile;
+      }
+    },
+  };
+
+  const ui = {
+    state: {
+      pageType: null, // museu | expo | espet | main | logged
+      activeItem: null, // {type,id,title}
+      addContextByModalId: new Map(), // modalId -> { afterEl }
+      stylesInjected: false,
+      searchIndex: [],
+    },
+
+    notify(message) {
+      const existing = document.getElementById('appNotify');
+      if (existing) existing.remove();
+
+      const box = document.createElement('div');
+      box.id = 'appNotify';
+      box.textContent = message;
+      box.setAttribute('role', 'status');
+      box.style.position = 'fixed';
+      box.style.left = '50%';
+      box.style.top = '16px';
+      box.style.transform = 'translateX(-50%)';
+      box.style.zIndex = '9999';
+      box.style.maxWidth = 'min(720px, calc(100vw - 32px))';
+      box.style.padding = '10px 14px';
+      box.style.borderRadius = '12px';
+      box.style.backdropFilter = 'blur(10px)';
+      box.style.background = 'rgba(20,20,20,.85)';
+      box.style.color = '#fff';
+      box.style.boxShadow = '0 12px 30px rgba(0,0,0,.35)';
+      box.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+      box.style.fontSize = '14px';
+      document.body.appendChild(box);
+
+      window.setTimeout(() => {
+        if (box && box.parentNode) box.parentNode.removeChild(box);
+      }, 2500);
+    },
+
+    injectBaseStyles() {
+      if (ui.state.stylesInjected) return;
+      ui.state.stylesInjected = true;
+
+      const style = document.createElement('style');
+      style.id = 'appInjectedStyles';
+      style.textContent = `
+        .app-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top: 14px; }
+        .app-actions .btn { border-radius: 999px; padding: 6px 12px; }
+        .app-dynamicCard {
+          width: min(1100px, calc(100vw - 44px));
+          margin: 44px auto;
+          display: grid;
+          grid-template-columns: 420px 1fr;
+          gap: 22px;
+          align-items: center;
         }
+        .app-dynamicCard .app-media img{
+          width: 100%;
+          height: 320px;
+          object-fit: cover;
+          border-radius: 18px;
+          box-shadow: 0 14px 40px rgba(0,0,0,.35);
+        }
+        .app-dynamicCard .app-text{
+          padding: 18px 18px;
+          border-radius: 18px;
+          background: rgba(255,255,255,.08);
+          border: 1px solid rgba(255,255,255,.12);
+          backdrop-filter: blur(10px);
+        }
+        .app-dynamicCard .app-text h1{
+          margin: 0 0 10px 0;
+          font-size: clamp(22px, 2.2vw, 34px);
+        }
+        .app-dynamicCard .app-text p{
+          margin: 0 0 10px 0;
+          line-height: 1.5;
+        }
+        @media (max-width: 900px){
+          .app-dynamicCard{ grid-template-columns: 1fr; }
+          .app-dynamicCard .app-media img{ height: 240px; }
+        }
+        .app-searchResults{
+          width: min(520px, calc(100vw - 44px));
+          margin: 10px auto 0 auto;
+          padding: 10px;
+          border-radius: 16px;
+          background: rgba(10,10,10,.75);
+          border: 1px solid rgba(255,255,255,.14);
+          backdrop-filter: blur(10px);
+          box-shadow: 0 14px 40px rgba(0,0,0,.35);
+        }
+        .app-searchResults .app-searchItem{
+          width: 100%;
+          text-align: left;
+          background: transparent;
+          border: 0;
+          color: #fff;
+          padding: 10px 10px;
+          border-radius: 12px;
+          cursor: pointer;
+          font-family: inherit;
+          font-size: 14px;
+        }
+        .app-searchResults .app-searchItem:hover{ background: rgba(255,255,255,.08); }
+        .app-searchResults .app-searchMeta{ opacity:.8; font-size:12px; margin-top:2px; }
+        .app-dim{ opacity:.25; filter: grayscale(.2); transition: opacity .15s ease; }
+        .app-likeActive{ outline: 2px solid rgba(255,255,255,.5); }
+        .app-loggedWrap{
+          width: min(900px, calc(100vw - 44px));
+          margin: 20px auto;
+        }
+        .app-authGrid{
+          display:grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          align-items: start;
+          margin-top: 16px;
+        }
+        .app-authCard{
+          padding: 16px;
+          border-radius: 16px;
+          background: rgba(255,255,255,.08);
+          border: 1px solid rgba(255,255,255,.14);
+          backdrop-filter: blur(10px);
+        }
+        .app-authCard h2{ margin:0 0 10px 0; font-size:18px; }
+        .app-authCard label{ display:block; margin:10px 0 6px 0; font-size:12px; opacity:.9; }
+        .app-authCard input{
+          width:100%;
+          padding: 10px 12px;
+          border-radius: 12px;
+          border: 1px solid rgba(255,255,255,.16);
+          background: rgba(0,0,0,.25);
+          color:#fff;
+          outline: none;
+        }
+        .app-authCard button{
+          margin-top: 12px;
+          width: 100%;
+          padding: 10px 12px;
+          border-radius: 999px;
+          border: 1px solid rgba(255,255,255,.16);
+          background: rgba(255,255,255,.12);
+          color:#fff;
+          cursor:pointer;
+        }
+        .app-authCard button:hover{ background: rgba(255,255,255,.16); }
+        .app-list{
+          list-style: none;
+          padding: 0;
+          margin: 10px 0 0 0;
+        }
+        .app-list li{
+          padding: 10px 12px;
+          border-radius: 12px;
+          background: rgba(255,255,255,.06);
+          border: 1px solid rgba(255,255,255,.12);
+          margin-bottom: 10px;
+        }
+        .app-list small{ display:block; opacity:.8; margin-top:4px; }
+      `;
+      document.head.appendChild(style);
+    },
+
+    detectPage() {
+      const file = (window.location.pathname.split('/').pop() || '').toLowerCase();
+      if (!file || file === '/' || file.startsWith('index')) return 'main';
+      if (file.includes('main')) return 'main';
+      if (file.includes('museu')) return 'museu';
+      if (file.includes('expo')) return 'expo';
+      if (file.includes('espet')) return 'espet';
+      if (file.includes('logged')) return 'logged';
+      return 'main';
+    },
+
+    normalizeDuplicateAddModals() {
+      // Pages contain repeated #addModal and repeated input IDs. We make each modal unique at runtime.
+      const modals = $$('.modal#addModal, .modal[id="addModal"]');
+      if (!modals.length) return;
+
+      modals.forEach((modal, idx) => {
+        const newModalId = `addModal-${idx + 1}`;
+        const oldId = modal.id;
+        modal.id = newModalId;
+
+        // Update aria-labelledby if present
+        const label = modal.querySelector('#addModalLabel');
+        if (label) {
+          const newLabelId = `addModalLabel-${idx + 1}`;
+          label.id = newLabelId;
+          modal.setAttribute('aria-labelledby', newLabelId);
+        }
+
+        // Find the corresponding button in the same slider
+        const slider = modal.closest('.slider') || modal.parentElement;
+        if (slider) {
+          const btn =
+            slider.querySelector(`button[data-bs-target="#${oldId}"]`) ||
+            slider.querySelector(`button[data-target="#${oldId}"]`) ||
+            slider.querySelector('button#addModalBtn') ||
+            slider.querySelector('button[data-bs-toggle="modal"]');
+
+          if (btn) {
+            btn.setAttribute('data-bs-target', `#${newModalId}`);
+            btn.removeAttribute('data-target');
+            btn.dataset.appModalId = newModalId;
+
+            // Save insertion context: after the container where the slider sits
+            const container = btn.closest('div[id^="container"]');
+            ui.state.addContextByModalId.set(newModalId, {
+              afterEl: container || null,
+            });
+
+            // Disable if not logged
+            if (!auth.isLoggedIn()) {
+              btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                ui.notify('Precisa de iniciar sessão para adicionar.');
+                nav.to('Logged.html');
+              });
+            }
+          }
+        }
+
+        // Attach confirm handler
+        const confirmBtn =
+          modal.querySelector('.modal-footer .btn.btn-dark') ||
+          modal.querySelector('.modal-footer button.btn-dark') ||
+          modal.querySelector('button[type="button"].btn.btn-dark');
+
+        if (confirmBtn) {
+          confirmBtn.dataset.appModalId = newModalId;
+          confirmBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await ui.handleAddConfirm(modal, newModalId);
+          });
+        }
+      });
+    },
+
+    buildItemIndex() {
+      const items = [];
+
+      const containerEls = $$('div[id^="container"]');
+      containerEls.forEach((el) => {
+        const title = (el.querySelector('h1')?.textContent || '').trim();
+        const bodyText = (el.textContent || '').replace(/\s+/g, ' ').trim();
+
+        if (!title) return;
+
+        const id = el.getAttribute('id') || `builtin-${items.length + 1}`;
+        el.dataset.appItemId = id;
+        el.dataset.appItemTitle = title;
+        el.classList.add('app-item');
+
+        items.push({ id, title, text: bodyText, el, kind: 'builtin' });
+      });
+
+      const dynamicEls = $$('.app-dynamicCard');
+      dynamicEls.forEach((el) => {
+        const title = (el.querySelector('h1')?.textContent || '').trim();
+        const bodyText = (el.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!title) return;
+
+        const id = el.dataset.appItemId || `dynamic-${items.length + 1}`;
+        el.dataset.appItemId = id;
+        el.dataset.appItemTitle = title;
+        el.classList.add('app-item');
+
+        items.push({ id, title, text: bodyText, el, kind: 'dynamic' });
+      });
+
+      ui.state.searchIndex = items;
+    },
+
+    initSearch() {
+      const input = $('#searchText');
+      const holder = $('.searchSpace');
+      if (!input || !holder) return;
+
+      ui.buildItemIndex();
+
+      const renderResults = (query) => {
+        holder.innerHTML = '';
+        if (!query) {
+          ui.state.searchIndex.forEach((it) => it.el.classList.remove('app-dim'));
+          return;
+        }
+
+        const q = query.toLowerCase();
+
+        const matches = ui.state.searchIndex
+          .filter((it) => (it.title + ' ' + it.text).toLowerCase().includes(q))
+          .slice(0, 7);
+
+        ui.state.searchIndex.forEach((it) => {
+          const hit = (it.title + ' ' + it.text).toLowerCase().includes(q);
+          it.el.classList.toggle('app-dim', !hit);
+        });
+
+        if (!matches.length) return;
+
+        const box = document.createElement('div');
+        box.className = 'app-searchResults';
+
+        matches.forEach((m) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'app-searchItem';
+          btn.innerHTML = `<div><strong>${escapeHtml(m.title)}</strong></div><div class="app-searchMeta">Clique para ir</div>`;
+          btn.addEventListener('click', () => {
+            const target = document.getElementById(m.id) || m.el;
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            input.blur();
+          });
+          box.appendChild(btn);
+        });
+
+        holder.appendChild(box);
+      };
+
+      const debounced = debounce((val) => renderResults(val), 140);
+
+      input.addEventListener('input', (e) => debounced(e.target.value || ''));
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          input.value = '';
+          renderResults('');
+        }
+      });
+    },
+
+    addActionButtonsToItems() {
+      const addButtonsTo = (textContainer, itemEl) => {
+        if (!textContainer || textContainer.querySelector('.app-actions')) return;
+
+        const actionWrap = document.createElement('div');
+        actionWrap.className = 'app-actions';
+
+        const likeBtn = document.createElement('button');
+        likeBtn.type = 'button';
+        likeBtn.className = 'btn btn-outline-light app-likeBtn';
+        likeBtn.textContent = 'Like';
+        likeBtn.addEventListener('click', () => {
+          const username = auth.currentUser();
+          if (!username) {
+            ui.notify('Precisa de iniciar sessão para dar Like.');
+            nav.to('Logged.html');
+            return;
+          }
+
+          const item = ui.extractItemInfo(itemEl);
+          const res = userData.addLike(username, item);
+          if (res.already) {
+            ui.notify('Já tinha dado Like.');
+          } else {
+            ui.notify('Like guardado.');
+            likeBtn.classList.add('app-likeActive');
+          }
+        });
+
+        const commentBtn = document.createElement('button');
+        commentBtn.type = 'button';
+        commentBtn.className = 'btn btn-outline-light app-commentBtn';
+        commentBtn.textContent = 'Comment';
+        commentBtn.addEventListener('click', () => {
+          const username = auth.currentUser();
+          if (!username) {
+            ui.notify('Precisa de iniciar sessão para comentar.');
+            nav.to('Logged.html');
+            return;
+          }
+          const text = window.prompt('Escreva o seu comentário:');
+          if (!text) return;
+          const item = ui.extractItemInfo(itemEl);
+          userData.addComment(username, { ...item, text });
+          ui.notify('Comentário guardado.');
+        });
+
+        actionWrap.appendChild(likeBtn);
+        actionWrap.appendChild(commentBtn);
+
+        textContainer.appendChild(actionWrap);
+      };
+
+      const containers = $$('div[id^="container"]');
+      containers.forEach((container) => {
+        const textBox =
+          container.querySelector('[class$="Texto"]') ||
+          container.querySelector('.museu1Texto, .expo1Texto, .espet1Texto') ||
+          container.querySelector('div');
+        addButtonsTo(textBox, container);
+      });
+
+      const dynamic = $$('.app-dynamicCard');
+      dynamic.forEach((card) => {
+        const textBox = card.querySelector('.app-text');
+        addButtonsTo(textBox, card);
+      });
+    },
+
+    extractItemInfo(itemEl) {
+      const id = itemEl?.dataset?.appItemId || itemEl?.id || `item-${Math.random().toString(16).slice(2)}`;
+      const title = (itemEl?.dataset?.appItemTitle || itemEl?.querySelector('h1')?.textContent || 'Item').trim();
+      return { type: ui.state.pageType || 'unknown', id, title };
+    },
+
+    wireTicketModal() {
+      const modal = document.getElementById('ticketModal');
+      const form = document.getElementById('ticketForm');
+      if (!modal || !form) return;
+
+      document.addEventListener('click', (e) => {
+        const target = e.target;
+        if (!(target instanceof Element)) return;
+
+        const isTicketTrigger =
+          target.matches('[data-bs-target="#ticketModal"]') ||
+          target.closest('[data-bs-target="#ticketModal"]') ||
+          target.matches('.ticketBtn') ||
+          target.closest('.ticketBtn');
+
+        if (!isTicketTrigger) return;
+
+        const itemEl = target.closest('.app-item') || target.closest('div[id^="container"]') || target.closest('.app-dynamicCard');
+        if (!itemEl) return;
+
+        ui.state.activeItem = ui.extractItemInfo(itemEl);
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const username = auth.currentUser();
+        if (!username) {
+          ui.notify('Precisa de iniciar sessão para comprar tickets.');
+          nav.to('Logged.html');
+          return;
+        }
+
+        const fd = new FormData(form);
+        const ticket = {
+          item: ui.state.activeItem || { type: ui.state.pageType || 'unknown', id: 'unknown', title: 'Unknown' },
+          firstname: String(fd.get('firstname') || ''),
+          lastname: String(fd.get('lastname') || ''),
+          email: String(fd.get('email') || ''),
+          time: String(fd.get('time') || ''),
+          day: String(fd.get('day') || ''),
+          tickets: String(fd.get('tickets') || ''),
+        };
+
+        userData.addTicket(username, ticket);
+        ui.notify('Ticket guardado na sua área pessoal.');
+
+        try {
+          if (window.bootstrap?.Modal) {
+            const instance = window.bootstrap.Modal.getInstance(modal) || new window.bootstrap.Modal(modal);
+            instance.hide();
+          }
+        } catch {
+          // ignore
+        }
+
+        form.reset();
+      });
+    },
+
+    async handleAddConfirm(modalEl, modalId) {
+      const username = auth.currentUser();
+      if (!username) {
+        ui.notify('Precisa de iniciar sessão para adicionar.');
+        nav.to('Logged.html');
+        return;
+      }
+
+      const titleInput = modalEl.querySelector('input[type="text"]');
+      const fileInput = modalEl.querySelector('input[type="file"]');
+      const textArea = modalEl.querySelector('textarea');
+
+      const title = (titleInput?.value || '').trim();
+      const description = (textArea?.value || '').trim();
+      const file = fileInput?.files?.[0] || null;
+
+      if (!title || !description || !file) {
+        ui.notify('Preencha título, texto e imagem.');
+        return;
+      }
+
+      const imageDataUrl = await readFileAsDataUrl(file);
+
+      const card = {
+        id: `c_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+        title,
+        description,
+        imageDataUrl,
+        createdAt: nowIso(),
+        createdBy: username,
+      };
+
+      const type = ui.state.pageType || 'museu';
+      cards.add(type, card);
+      ui.renderCard(type, card, modalId);
+
+      try {
+        if (window.bootstrap?.Modal) {
+          const instance = window.bootstrap.Modal.getInstance(modalEl) || new window.bootstrap.Modal(modalEl);
+          instance.hide();
+        }
+      } catch {
+        // ignore
+      }
+
+      if (titleInput) titleInput.value = '';
+      if (textArea) textArea.value = '';
+      if (fileInput) fileInput.value = '';
+
+      ui.notify('Card adicionado.');
+    },
+
+    renderSavedCards(type) {
+      const list = cards.list(type);
+      if (!list.length) return;
+      list.forEach((card) => ui.renderCard(type, card, null, { silent: true }));
+    },
+
+    renderCard(type, card, modalId, opts = {}) {
+      const section = document.querySelector('main section:last-of-type') || document.querySelector('main') || document.body;
+      const ticketModal = document.getElementById('ticketModal');
+
+      const el = document.createElement('div');
+      el.className = 'app-dynamicCard app-item';
+      el.dataset.appItemId = card.id;
+      el.dataset.appItemTitle = card.title;
+      el.id = card.id;
+
+      el.innerHTML = `
+        <div class="app-media">
+          <img src="${card.imageDataUrl}" alt="${escapeHtml(card.title)}">
+        </div>
+        <div class="app-text">
+          <h1>${escapeHtml(card.title)}</h1>
+          <p>${escapeHtml(card.description).replace(/\n/g, '<br>')}</p>
+          <p><u>Added by:</u> ${escapeHtml(card.createdBy || 'user')}</p>
+          <button type="button" class="btn btn-outline-light ticketBtn" data-bs-toggle="modal" data-bs-target="#ticketModal">Buy Tickets</button>
+        </div>
+      `;
+
+      const ctx = modalId ? ui.state.addContextByModalId.get(modalId) : null;
+      const afterEl = ctx?.afterEl || null;
+
+      if (afterEl && afterEl.parentElement) {
+        afterEl.insertAdjacentElement('afterend', el);
+      } else if (ticketModal && ticketModal.parentElement) {
+        ticketModal.parentElement.insertBefore(el, ticketModal);
+      } else {
+        section.appendChild(el);
+      }
+
+      ui.addActionButtonsToItems();
+      ui.buildItemIndex();
+
+      if (!opts.silent) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    },
+
+    initLoggedPage() {
+      ui.injectBaseStyles();
+
+      const main = document.querySelector('main');
+      if (!main) return;
+
+      const username = auth.currentUser();
+
+      const setTopBar = () => {
+        const titleBtn = document.getElementById('searchTitle');
+        if (titleBtn) titleBtn.onclick = () => nav.to('Main.html');
+      };
+
+      if (!username) {
+        main.innerHTML = `
+          <div class="app-loggedWrap">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <button id="searchTitle" type="button" style="all:unset; cursor:pointer; font-size:18px; font-weight:700;">Art Space</button>
+              <h1 style="margin:0; font-size:22px;">Login</h1>
+            </div>
+
+            <div class="app-authGrid">
+              <section class="app-authCard">
+                <h2>Entrar</h2>
+                <form id="appLoginForm">
+                  <label for="appLoginUser">Username</label>
+                  <input id="appLoginUser" autocomplete="username" required>
+                  <label for="appLoginPass">Password</label>
+                  <input id="appLoginPass" type="password" autocomplete="current-password" required>
+                  <button type="submit">Login</button>
+                </form>
+              </section>
+
+              <section class="app-authCard">
+                <h2>Criar conta</h2>
+                <form id="appRegisterForm">
+                  <label for="appRegUser">Username</label>
+                  <input id="appRegUser" required>
+                  <label for="appRegUser2">Confirm Username</label>
+                  <input id="appRegUser2" required>
+                  <label for="appRegPass">Password</label>
+                  <input id="appRegPass" type="password" required>
+                  <label for="appRegPass2">Confirm Password</label>
+                  <input id="appRegPass2" type="password" required>
+                  <button type="submit">Register</button>
+                </form>
+              </section>
+            </div>
+
+            <p style="opacity:.85; margin-top:12px;">Contas demo: <strong>admin/admin</strong> e <strong>user/user</strong>.</p>
+          </div>
+        `;
+
+        setTopBar();
+
+        $('#appLoginForm')?.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const u = String($('#appLoginUser')?.value || '').trim();
+          const p = String($('#appLoginPass')?.value || '').trim();
+          const res = auth.login(u, p);
+          ui.notify(res.message);
+          if (res.ok) window.location.reload();
+        });
+
+        $('#appRegisterForm')?.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const u1 = String($('#appRegUser')?.value || '').trim();
+          const u2 = String($('#appRegUser2')?.value || '').trim();
+          const p1 = String($('#appRegPass')?.value || '').trim();
+          const p2 = String($('#appRegPass2')?.value || '').trim();
+          const res = auth.register(u1, u2, p1, p2);
+          ui.notify(res.message);
+          if (res.ok) window.location.reload();
+        });
+
+        return;
+      }
+
+      const data = userData.load(username);
+
+      main.classList.add('app-loggedWrap');
+
+      main.innerHTML = `
+        <section style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <button id="searchTitle" type="button" style="all:unset; cursor:pointer; font-size:18px; font-weight:700;">Art Space</button>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <h1 style="margin:0; font-size:22px;">Personal Area</h1>
+            <button id="appLogout" type="button" style="padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.12); color:#fff; cursor:pointer;">Logout</button>
+          </div>
+        </section>
+
+        <section style="display:flex; align-items:center; gap:14px; margin-top:16px;">
+          <img src="/EXTRA/login.png" alt="Imagem de perfil" style="width:64px; height:64px; border-radius:999px; object-fit:cover; border:1px solid rgba(255,255,255,.2);">
+          <div>
+            <div style="font-weight:700; font-size:18px;">@${escapeHtml(username)}</div>
+            <div style="opacity:.85; font-size:13px;">Dados guardados localmente neste navegador.</div>
+          </div>
+        </section>
+
+        <section style="margin-top:16px;">
+          <h2 style="margin:0; font-size:18px;">Likes</h2>
+          ${renderList(data.likes, (l) => `${escapeHtml(l.title)} <small>${escapeHtml(l.type)} • ${formatDate(l.createdAt)}</small>`)}
+        </section>
+
+        <section style="margin-top:16px;">
+          <h2 style="margin:0; font-size:18px;">Comments</h2>
+          ${renderList(data.comments, (c) => `${escapeHtml(c.title)} — ${escapeHtml(c.text)} <small>${escapeHtml(c.type)} • ${formatDate(c.createdAt)}</small>`)}
+        </section>
+
+        <section style="margin-top:16px;">
+          <h2 style="margin:0; font-size:18px;">Tickets</h2>
+          ${renderList(data.tickets, (t) => `${escapeHtml(t.item?.title || 'Item')} — ${escapeHtml(t.tickets)} ticket(s), ${escapeHtml(t.day)} (${escapeHtml(t.time)}) <small>${escapeHtml(t.item?.type || '')} • ${formatDate(t.createdAt)}</small>`)}
+        </section>
+      `;
+
+      setTopBar();
+
+      $('#appLogout')?.addEventListener('click', () => {
+        auth.logout();
+        ui.notify('Sessão terminada.');
+        window.location.reload();
+      });
+    },
+
+    initListingPage(type) {
+      ui.injectBaseStyles();
+      ui.state.pageType = type;
+
+      ui.normalizeDuplicateAddModals();
+      ui.renderSavedCards(type);
+      ui.initSearch();
+      ui.wireTicketModal();
+      ui.addActionButtonsToItems();
+      ui.buildItemIndex();
+    },
+
+    initMainPage() {
+      ui.state.pageType = 'main';
+    },
+  };
+
+  function debounce(fn, ms) {
+    let t = null;
+    return (...args) => {
+      if (t) window.clearTimeout(t);
+      t = window.setTimeout(() => fn(...args), ms);
+    };
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleString();
+    } catch {
+      return String(iso);
     }
-    if(register_verified == 1){
-            usernames.push(user_register_name)
-            passwords.push(user_register_pass)
-            userlogged = true
-            accountlogged = user_register_name
-            alert("Conta criada com sucesso!")
-            console.log(user_register_name); console.log(user_register_pass)
-            Logged();
-        } else{alert("Já existe uma conta com esse nome!")}
-        register_verified = 1
-} 
-else{alert("Certifique-se de que a password/nome e o confirmar password/nome são iguais.")}
-return false;
-}
-
-function Museu(){
-document.head.innerHTML = (`
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Space</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/CSS/Museu.css"> 
-    `)
-document.querySelector("main").innerHTML = (`  
-      <main>
-    <section class="searchBar">
-
-      <div class="bar">
-        <p id="searchTitle" onclick="MainPage()">Art Space</p>
-        <img src="/EXTRA/searchIcon.png" id="searchIcon" alt="Icon de pesquisa">
-        <input type="text" placeholder="Search" id="searchText">
-      </div>
-
-      <div class="searchSpace"></div>
-
-    </section>
-
-    <section>
-
-      <img id="pillar1" src="/EXTRA/PillarsHalf2.png" alt="Imagem cortada de um pilar decorativo do website.">
-      <img id="pillar2" src="/EXTRA/PillarFull.png" alt="Imagem de um pilar decorativo do website.">
-
-      <div id="container1">
-        <div class="museu1" onclick="Museum1()">
-          <img src="/EXTRA/Museum/m1.png" alt="Imagem do Museu do Louvre">
-        </div>
-        <div class="museu1Texto">
-          <h1> Louvre Museum</h1>
-          <p>The Louvre Museum is the world's largest and most visited art museum, <br>
-            housed in a former royal palace on the Seine River,
-            famous for iconic works like the Mona Lisa,<br> Venus de Milo and Winged Victory of Samothrace,
-            showcasing art from ancient civilizations <br>to the mid-19th century
-            through its extensive departments like Egyptian, Greek, Roman,<br> Paintings,
-            and Islamic Art.</p>
-          <p><u>Location:</u>Paris, France</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-         <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-        </div>
-      </div>
-
-      <div id="container2">
-        <div class="museu2" onclick="Museum2()">
-          <img src="/EXTRA/Museum/m2.png" alt="Imagem do Museu do Louvre">
-        </div>
-        <div class="museu2Texto">
-          <h1> Nacional Art Museum</h1>
-          <p>The National Art Museum of China, also known as NAMOC is China's premier <br>
-            institution for modern and contemporary plastic arts, <br>
-            featuring a collection of over 100,000 works by Chinese masters <br>
-            from the late 19th century onward, housed in a distinctive building <br>
-            with traditional Chinese architectural elements like yellow glazed tiles and pavilions, <br>
-            serving as a cultural landmark for exhibiting, collecting, researching,<br>
-            and educating on Chinese art history and development, with a sculpture park<br>
-            and international exchanges adding to its scope. </p>
-          <p><u>Location:</u>Beijing, China</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-         <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-        </div>
-      </div>
-
-      <div id="container3">
-        <div class="museu3" onclick="Museum3()">
-          <img src="/EXTRA/Museum/m3.png" alt="Imagem do Museu do Louvre">
-        </div>
-        <div class="museu3Texto">
-          <h1> Vatican Museum</h1>
-          <p>The Vatican Museums are a vast complex in Vatican City housing<br>
-            immense art and historical collections amassed by popes,<br>
-            featuring masterpieces like Michelangelo's Sistine Chapel and Raphael's Rooms,<br>
-            showcasing Renaissance art, Roman sculptures, Egyptian artifacts, and more,<br>
-            offering a journey through human history and faith, attracting millions annually<br>
-            to its 54 galleries filled with 70,000 works,<br>
-            including significant ethnographic collections. </p>
-          <p><u>Location:</u>Vatican City, Vatican</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-         <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-        </div>
-      </div>
-
-      <div id="container4">
-        <div class="museu4" onclick="Museum4()">
-          <img src="/EXTRA/Museum/m4.png" alt="Imagem do Museu Britânico">
-        </div>
-        <div class="museu4Texto">
-          <h1> British Museum</h1>
-          <p>The British Museum in London is a world-renowned public museum housing<br>
-            vast collections of human history, art, and culture, featuring millions of<br>
-            artifacts from across the globe, including iconic items like the Rosetta Stone<br>
-            and Parthenon Sculptures, showcasing two million years of history with free entry<br>
-            and highlighting global civilizations in a landmark building with Europe's largest<br>
-            covered public square, the Queen Elizabeth II Great Court. </p>
-          <p><u>Location:</u>London, England</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-         <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-        </div>
-      </div>
-
-      <div id="container5">
-        <div class="museu5" onclick="Museum5()">
-          <img src="/EXTRA/Museum/m5.png" alt="Imagem do Museu Metropolitano de arte">
-        </div>
-        <div class="museu5Texto">
-          <h1> Metropolitan Museum of Art</h1>
-          <p>The Metropolitan Museum of Art (The Met) in New York City is the largest art<br>
-            museum in the U.S., housing over two million works spanning 5,000 years of world history,<br>
-            from antiquity to the present, across 17 departments like Egyptian art, European paintings,<br>
-            and Islamic art, with locations including The Met Fifth Avenue and The Met Cloisters,<br>
-            connecting people to creativity, knowledge, and cultures. </p>
-          <p><u>Location:</u>New York, USA</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-         <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-        </div>
-      </div>
-
-
-    </section>
-  </main>
-    `)
-}
-
-function Logged(){
-  document.head.innerHTML = (`
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Space - Login Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/CSS/Logged.css"> 
-    `)
-document.querySelector("main").innerHTML = (`  
-    <main class="container">
-   <div class="bar">
-        <p id="searchTitle" onclick="Main()">Art Space</p>
-      </div>
-        <section class="title">
-           <h1>Personal Area</h1>
-        </section>
-
-        <section class="perfil">
-            <img src="/EXTRA/login.png" alt="Imagem de perfil da pessoa que fez login" id="loginPic">
-            <p>` + accountlogged + `</p>
-        </section>
-
-        <section class="gosto">
-            <p>Likes</p>
-        </section>
-
-        <section class="comentario">
-            <p>Comments</p>
-        </section>
-
-        <section class="bilhete">
-            <p>Tickets</p>
-        </section>
-    </main>
-    `)
-
-}
-function Main(){
-   document.head.innerHTML = (`
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Space - Login Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/CSS/Logged.css"> 
-    `)
-      document.querySelector("main").innerHTML = (`  
-    <main class="container">
-        <section class="title">
-           <h1>Personal Area</h1>
-        </section>
-
-        <section class="perfil">
-            <img src="/EXTRA/login.png" alt="Imagem de perfil da pessoa que fez login" id="loginPic">
-            <p>`+usernames[i]+`</p>
-        </section>
-
-        <section class="gosto">
-            <p>Likes</p>
-        </section>
-
-        <section class="comentario">
-            <p>Comments</p>
-        </section>
-
-        <section class="bilhete">
-            <p>Tickets</p>
-        </section>
-    </main>
-    `)
-}
-
-function Expo(){
-   document.head.innerHTML = (`
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Space - Login Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/CSS/Expo.css"> 
-    `)
-      document.querySelector("main").innerHTML = (`  
-    <main>
-    <section class="searchBar">
-
-      <div class="bar">
-        <p id="searchTitle" onclick="MainPage()">Art Space</p>
-        <img src="/EXTRA/searchIcon.png" id="searchIcon" alt="Icon de pesquisa">
-        <input type="text" placeholder="Search" id="searchText">
-      </div>
-
-      <div class="searchSpace"></div>
-
-    </section>
-
-    <section>
-
-      <img id="pillar1" src="/EXTRA/PillarsHalf2.png" alt="Imagem cortada de um pilar decorativo do website.">
-      <img id="pillar2" src="/EXTRA/PillarFull.png" alt="Imagem de um pilar decorativo do website.">
-
-      <div id="container1">
-
-        <div class="expo1" onclick="Expo1()">
-          <img src="/EXTRA/Exhibition/ex1.png" alt="Imagem da exposição 'Botticelli's Drawings'">
-        </div>
-
-        <div class="expo1Texto">
-          <h1>Botticelli's Drawings</h1>
-          <p>Botticelli Drawings exhibitions, like the landmark show at San Francisco's Legion of Honor,<br>
-            offer a rare look into the Renaissance master's creative process, <br>
-            showcasing his drawings—often unseen—alongside related paintings<br>
-            and manuscripts to reveal his artistic journey, <br>
-            from apprentice studies to final masterpieces, highlighting his mastery of line, <br>
-            innovative techniques, and evolving focus on religious themes<br>
-            influenced by figures like Savonarola, presenting an intimate view <br>
-            of his design skills and unparalleled graphic virtuosity. </p>
-          <p><u>Location:</u> Florence, Italy</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-        </div>
-      </div>
-
-      <div id="container2">
-        <div class="expo2" onclick="Expo2()">
-          <img src="/EXTRA/Exhibition/ex2.png" alt="Imagem da exposição 'Frans Hals'">
-        </div>
-
-        <div class="expo2Texto">
-          <h1>Frans Hals</h1>
-          <p>Frans Hals exhibitions, like the major 2023-2024 retrospectives,<br>
-            focus on his revolutionary, lifelike portraits, showcasing his rapid, <br>
-            expressive brushwork that captured personality, laughter, <br>
-            and the vibrancy of Dutch Golden Age life. <br>
-            These shows reunite dispersed family portraits, feature iconic works <br>
-            like "The Laughing Cavalier," and highlight Hals's influence on <br>
-            later artists (Impressionists), presenting him as a pioneer in dynamic,<br>
-            modern portraiture through thematic displays and chronological <br>
-            journeys through his evolving style.</p>
-          <p><u>Location:</u> Amsterdam, Netherlands</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-        </div>
-      </div>
-
-      <div id="container3">
-
-        <div class="expo3" onclick="Expo3()">
-          <img src="/EXTRA/Exhibition/ex3.png" alt="Imagem da exposição 'Rosana Paulino'">
-        </div>
-
-        <div class="expo3Texto">
-          <h1>Rosana Paulino's Amefricana</h1>
-          <p>The works to be exhibited address the history of slavery, <br>
-            with some phenotypic photos that the Swiss photographer Auguste Stahl <br>
-            took in the 19th century, of black women and men from the front, <br>
-            from the back and in profile, images that Paulino transposes onto canvas, <br>
-            cuts, and sutures. </p>
-          <p><u>Location:</u> Milan, Italy</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-        </div>
-      </div>
-
-      <div id="container4">
-
-        <div class="expo4" onclick="Expo4()">
-          <img src="/EXTRA/Exhibition/ex4.png" alt="Imagem da exposição 'Paris 1874'">
-        </div>
-
-        <div class="expo4Texto">
-          <h1>Paris 1874</h1>
-          <p>In Paris, 1874, a revolutionary art exhibition by the Société Anonyme<br>
-            (Anonymous Society) marked the birth of Impressionism,<br>
-            showcasing radical works by Monet, Renoir, Degas, Morisot,<br>
-            and others rejected by the official Salon, focusing on modern life, <br>
-            light, and fleeting impressions, a departure from tradition <br>
-            that scandalized critics but established a new avant-garde art movement.</p>
-          <p><u>Location:</u> Paris, France</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-        </div>
-      </div>
-
-      <div id="container5">
-
-        <div class="expo5" onclick="Expo5()">
-          <img src="/EXTRA/Exhibition/ex5.png" alt="Imagem da exposição 'Surrealism'">
-        </div>
-
-        <div class="expo5Texto">
-          <h1> Surrealism. Other Myths</h1>
-          <p>"Surrealism. Other Myths" exhibitions explore Surrealism as a global,<br>
-            evolving force, challenging its traditional boundaries by showcasing Polish<br>
-            and Eastern European artists alongside Western figures, highlighting dreams,<br>
-            the subconscious, and political engagement from the interwar period through <br>
-            the postwar era, featuring techniques like frottage and decalcomania, <br>
-            and connecting it to anti-colonialism and local struggles against authoritarianism. <br>
-            These shows reveal Surrealism's diverse expressions, <br>
-            from bizarre dreamscapes by the Artes Group to politically <br>
-            charged works addressing war and oppression, proving it a dynamic movement<br>
-            beyond its initial French context. </p>
-          <p><u>Location:</u> Athens, Greece</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-          <a href="#container1">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container2">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container3">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container4">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-          <a href="#container5">
-            <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-          </a>
-        </div>
-      </div>
-    </section>
-  </main>
-    `)
-}
-
-function Espet(){
-  document.head.innerHTML = (`
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Space - Login Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/CSS/Espet.css"> 
-    `)
-      document.querySelector("main").innerHTML = (`  
-      <main>
-    <section class="searchBar">
-
-      <div class="bar">
-        <p id="searchTitle" onclick="Main()">Art Space</p>
-        <img src="/EXTRA/searchIcon.png" id="searchIcon" alt="Icon de pesquisa">
-        <input type="text" placeholder="Search" id="searchText">
-      </div>
-
-      <div class="searchSpace"></div>
-
-    </section>
-
-    <section>
-
-      <img id="pillar1" src="/EXTRA/PillarsHalf2.png" alt="Imagem cortada de um pilar decorativo do website.">
-      <img id="pillar2" src="/EXTRA/PillarFull.png" alt="Imagem de um pilar decorativo do website.">
-
-      <div id="container1">
-        <div class="espet1" onclick="Espet1()">
-          <img src="/EXTRA/LiveShows/es1.png" alt="Imagem do espetáculo 'Lago dos Cisnes'">
-        </div>
-        <div class="espet1Texto">
-          <h1> Swan Lake</h1>
-          <p>Swan Lake is a tragic ballet about Prince Siegfried,<br>
-        who falls in love with Princess Odette, a woman cursed <br>
-        by the evil sorcerer Von Rothbart to be a swan by day and human by night;<br>
-        the spell can only be broken by a vow of true love, <br>
-        but Siegfried is tricked into betraying Odette with the sorcerer's daughter.</p>
-          <p><u>Location:</u>Moscow, Russia</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
-      </div>
-
-      <div id="container2">
-        <div class="espet2" onclick="Espet2()">
-          <img src="/EXTRA/LiveShows/es2.png" alt="Imagem do espetáculo 'Hamilton'">
-        </div>
-        <div class="espet2Texto">
-          <h1>Hamilton</h1>
-          <p>Hamilton is a revolutionary Broadway musical by Lin-Manuel Miranda<br>
-        that tells the story of American Founding Father Alexander Hamilton <br>
-        through a blend of hip-hop, jazz, R&B, and traditional show tunes,<br>
-        known for its diverse, multiracial cast representing "America then,<br>
-        as told by America now". It follows Hamilton's journey<br>
-        from impoverished orphan to influential statesman, <br>
-        detailing his rise in the American Revolution,<br>
-        his role as the first Treasury Secretary, and his famous rivalry with Aaron Burr,<br>
-        culminating in his tragic death in a duel.</p>
-          <p><u>Location:</u>Manhattan, USA</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
-      </div>
-
-      <div id="container3">
-        <div class="espet3" onclick="Espet3()">
-          <img src="/EXTRA/LiveShows/es3.png" alt="Imagem do espetáculo 'Alladino no Gelo'">
-        </div>
-        <div class="espet3Texto">
-          <h1> Alladin On Ice</h1>
-          <p>Aladdin on Ice is a spectacular live show blending figure skating,<br>
-        acrobatics, and circus arts with the classic tale of Aladdin, <br>
-        featuring dazzling costumes, vibrant sets, and popular songs <br>
-        to bring the magical story of Agrabah, the Genie,<br>
-        and "A Whole New World" to life on synthetic or real ice for family audiences. <br>
-        Productions often combine professional skaters with local talent <br>
-        and incorporate advanced visual effects, showcasing complex stunts <br>
-        like the flying carpet and fire juggling alongside graceful choreography.</p>
-          <p><u>Location:</u>Lisbon, Portugal</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
-      </div>
-
-      <div id="container4">
-        <div class="espet4" onclick="Espet4()">
-          <img src="/EXTRA/LiveShows/es4.png" alt="Imagem do espetáculo'Nutcracker'">
-        </div>
-        <div class="espet4Texto">
-          <h1>Nutcracker</h1>
-          <p>The Nutcracker is a magical Christmas ballet by Tchaikovsky,<br>
-        telling the story of a young girl named Clara who receives an<br>
-        enchanted Nutcracker doll on Christmas Eve; it comes to life, <br>
-        battles the evil Mouse King, and whisks her away to the fantastical <br>
-        Land of Sweets for a celebration of dances, all set to iconic classical music. </p>
-          <p><u>Location:</u>Washington, USA</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
-      </div>
-
-      <div id="container5">
-        <div class="espet5" onclick="Espet5()">
-          <img src="/EXTRA/LiveShows/es5.png" alt="Imagem do espetáculo 'Fantasma da Opera'">
-        </div>
-        <div class="espet5Texto">
-          <h1> The Phantom of the Opera</h1>
-          <p>The Phantom of the Opera is a classic romantic musical about a <br>
-            disfigured musical genius haunting the Paris Opera House who<br>
-             becomes obsessed with a young soprano, Christine Daaé, <br>
-             and schemes to make her a star, leading to a tragic love triangle <br>
-             with her childhood sweetheart, Raoul, <br>
-             and dramatic events like a massive chandelier crash. </p>
-          <p><u>Location:</u>London, England</p>
-
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
-      </div>
-
-
-    </section>
-  </main>
-    `)
-}
-
-document.querySelector("#formExhibition").addEventListener('submit', (event) => {
-    event.preventDefault();
-    Exibicao();
-})
-
-function Exibicao(){
-let i = 0
-
-  museu_name[i] = document.querySelector("#museu_name").value
-  museu_image[i] = document.querySelector("#museu_image").value 
-  museu_description[i] = document.querySelector("#museu_description").value
-
-document.querySelector("main").innerHTML = +(`
-        <div id="container`+i+6+`">
-        <div class="espet1" onclick="Espet1()">
-          <img src="`+ museu_image +`" alt="Imagem do espetáculo '`+ museu_name +`'">
-        </div>
-        <div class="espet1Texto">
-          <h1>`+museu_name+`</h1>
-          <p>`+museu_description+`
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container`+i+6+`">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
-      </div>
-} `)
-
-i++
-}
-
-function Exibicao(){
-let j = 0
-
-  espet_name[j] = document.querySelector("#espet_name").value
-  espet_image[j] = document.querySelector("#espet_image").value 
-  espet_description[j] = document.querySelector("#espet_description").value
-
-document.querySelector("main").innerHTML = +(`
-        <div id="container`+j+6+`">
-        <div class="espet1" onclick="Espet1()">
-          <img src="`+ espet_image +`" alt="Imagem do espetáculo '`+ espet_name +`'">
-        </div>
-        <div class="espet1Texto">
-          <h1>`+espet_name+`</h1>
-          <p>`+espet_description+`
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container`+j+6+`">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
-      </div>
-} `)
-
-j++
-}
-
-function Exibicao(){
-let t = 0
-
-  expo_name[i] = document.querySelector("#expo_name").value
-  expo_image[i] = document.querySelector("#expo_image").value 
-  expo_description[i] = document.querySelector("#expo_description").value
-
-document.querySelector("main").innerHTML = +(`
-        <div id="container`+t+6+`">
-        <div class="espet1" onclick="Espet1()">
-          <img src="`+ expo_image +`" alt="Imagem do espetáculo '`+ expo_name +`'">
-        </div>
-        <div class="espet1Texto">
-          <h1>`+expo_name+`</h1>
-          <p>`+expo_description+`
-          <a href="#modal-example" class="modal-trigger">Buy Tickets</a>
-
-          <div id="modal-example" class="modal">
-
-            <a href="#" class="modal-backdrop"></a>
-
-            <div class="modal-content">
-              <h2>Tickets</h2>
-              <form>
-                First Name:<br><input type="text" name="firstname" required><br>
-                Last Name:<br><input type="text" name="lastname" required><br>
-                Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
-                Time:<br>
-                <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
-                <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
-                <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
-                <label for="day">Available Dates</label><br>
-                <select name="day" id="day">
-                  <option value="jan29">January 29th</option>
-                  <option value="feb3">February 3th</option>
-                  <option value="feb18">February 18th</option>
-                  <option value="mar8">March 8th</option>
-                </select><br><br>
-                Tickets:<br>
-                <input type="radio" name="hour" value="1" checked> 1
-                <input type="radio" name="hour" value="2"> 2
-                <input type="radio" name="hour" value="3"> 3
-                <input type="radio" name="hour" value="4"> 4
-                <input type="radio" name="hour" value="5"> 5
-                <input type="radio" name="hour" value="6"> 6
-                <input type="Submit" value="Confirm" class="modal-confirm">
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div class="slider">
-        <a href="#container1">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container2">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container3">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container4">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container5">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-        <a href="#container`+t+6+`">
-          <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
-        </a>
-      </div>
-      </div>
-} `)
-
-t++
-}
+  }
+
+  function renderList(items, renderItem) {
+    if (!Array.isArray(items) || items.length === 0) {
+      return '<p style="opacity:.85; margin-top:8px;">(vazio)</p>';
+    }
+    return `<ul class="app-list">${items
+      .slice()
+      .reverse()
+      .map((it) => `<li>${renderItem(it)}</li>`)
+      .join('')}</ul>`;
+  }
+
+  function readFileAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('Falha a ler imagem.'));
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Expose navigation functions used by inline onclick attributes
+  window.Main = () => nav.to('Main.html');
+  window.MainPage = window.Main;
+  window.Museu = () => nav.to('Museu.html');
+  window.Expo = () => nav.to('Expo.html');
+  window.Espet = () => nav.to('Espet.html');
+  window.Logged = () => nav.to('Logged.html');
+
+  // Optional: card image click handlers present in HTML (avoid “function not defined”)
+  const makeOpenTicket = (containerId) => () => {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    ui.state.activeItem = ui.extractItemInfo(el);
+    const btn = el.querySelector('[data-bs-target="#ticketModal"], .ticketBtn');
+    if (btn) btn.click();
+  };
+
+  for (let i = 1; i <= 10; i++) {
+    window[`Museum${i}`] = makeOpenTicket(`container${i}`);
+    window[`Expo${i}`] = makeOpenTicket(`container${i}`);
+    window[`Espet${i}`] = makeOpenTicket(`container${i}`);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    auth.ensureDefaults();
+
+    const page = ui.detectPage();
+    ui.state.pageType = page;
+
+    if (page === 'logged') {
+      ui.initLoggedPage();
+      return;
+    }
+
+    if (page === 'museu' || page === 'expo' || page === 'espet') {
+      ui.initListingPage(page);
+      return;
+    }
+
+    ui.initMainPage();
+  });
+})();

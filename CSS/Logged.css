@@ -1,88 +1,132 @@
 @font-face {
-    font-family: Playfair_Display;
-    src: url(/EXTRA/Fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf);
+  font-family: Playfair_Display;
+  src: url(/EXTRA/Fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf);
 }
 
+:root{
+  --brand:#400101;
+  --brand-2:#1e0000;
+  --muted:#BFBFAA;
+  --text: rgba(255,255,255,0.92);
+  --border: rgba(191,191,170,0.16);
+  --glass: rgba(30,0,0,0.55);
+  --radius: 18px;
+}
 
 body{
-    background-image: url("/EXTRA/background.png");
-    color: white;
-    font-family: Playfair_Display;
-    color: #bfbfaa;
-    padding: 0;
-    margin: 0;
+  margin:0;
+  padding:0;
+  font-family: Playfair_Display, serif;
+  color: var(--muted);
+  background: url("/EXTRA/background.png") center/cover fixed no-repeat;
 }
 
 .container{
-    width: 100vw;
-    height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+  min-height: 100vh;
+  display:grid;
+  grid-template-columns: 1fr 340px;
+  grid-template-rows: auto 1fr 1fr 1fr;
+  grid-template-areas:
+    "title perfil"
+    "gosto perfil"
+    "comentario perfil"
+    "bilhete perfil";
+  gap: 18px;
+  padding: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
-#searchTitle {
-    margin-left: 5px;
-    margin-right: auto;
-    font-size: x-large;
-    font-weight: bold;
+.title{
+  grid-area: title;
+  display:flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 18px 18px;
+  border-radius: var(--radius);
+  background: rgba(64,1,1,0.82);
+  border: 1px solid rgba(191,191,170,0.14);
+  backdrop-filter: blur(6px);
 }
 
-.title {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    margin-left: 25px;
+#searchTitle{
+  background: transparent;
+  border:none;
+  color: var(--muted);
+  font-size: 1.35rem;
+  font-weight: 700;
+  padding: 0;
+  cursor:pointer;
 }
 
-.perfil {
-    grid-column-start: 4;
-    grid-column-end: 5;
-    grid-row-start: 1;
-    grid-row-end: 5;
-    background-color: #400101;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+.title h1{
+  margin: 0;
+  font-size: clamp(26px, 2.4vw, 40px);
+  color: #ffffff;
 }
 
-.perfil p {
-    margin-top: 10px;
+.perfil{
+  grid-area: perfil;
+  background: rgba(64,1,1,0.92);
+  border-radius: var(--radius);
+  border: 1px solid rgba(191,191,170,0.14);
+  padding: 22px 18px;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
-#loginPic {
-    width: 200px;
-    margin-top: 50px;
-    position: absolute;
+#loginPic{
+  width: 190px;
+  height: 190px;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 1px solid rgba(191,191,170,0.24);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.35);
 }
 
-.gosto {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    font-weight: bold;
-    font-size: large;
-    margin-left: 50px;
+.perfil p{
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
-.comentario {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row-start: 3;
-    grid-row-end: 4;
-    font-weight: bold;
-    font-size: large;
-    margin-left: 50px;
+.gosto, .comentario, .bilhete{
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  backdrop-filter: blur(5px);
 }
 
-.bilhete {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row-start: 4;
-    grid-row-end: 5;
-    font-weight: bold;
-    font-size: large;
-    margin-left: 50px;
+.gosto{ grid-area: gosto; }
+.comentario{ grid-area: comentario; }
+.bilhete{ grid-area: bilhete; }
+
+.gosto p, .comentario p, .bilhete p{
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+@media (max-width: 900px){
+  .container{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "title"
+      "perfil"
+      "gosto"
+      "comentario"
+      "bilhete";
+  }
+}
+
+
+#searchTitle:focus-visible{
+  outline: 3px solid rgba(191,191,170,0.55);
+  outline-offset: 4px;
+  border-radius: 10px;
 }
