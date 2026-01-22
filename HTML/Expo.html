@@ -56,8 +56,6 @@
             influenced by figures like Savonarola, presenting an intimate view <br>
             of his design skills and unparalleled graphic virtuosity. </p>
           <p><u>Location:</u> Florence, Italy</p>
-
-          </div>
         </div>
 
         <div class="slider">
@@ -77,7 +75,7 @@
             <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
           </a>
 
-          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
+           <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
             Add
           </button>
 
@@ -96,7 +94,7 @@
                     Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
                     Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
                     Text:<br><textarea id="museu_description" required></textarea>
-                  
+
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -106,6 +104,91 @@
               </div>
             </div>
           </div>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#ticketModal" id="ticketModalBtn">
+            Buy Tickets
+          </button>
+
+          <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Time:<br>
+                    <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                    <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                    <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                    <label for="day">Available Dates</label><br>
+                    <select name="day" id="day">
+                      <option value="jan29">January 29th</option>
+                      <option value="feb3">February 3th</option>
+                      <option value="feb18">February 18th</option>
+                      <option value="mar8">March 8th</option>
+                    </select><br><br>
+                    Tickets:<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5
+                    <input type="radio" name="hour" value="6"> 6
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#reviewModal" id="reviewModalBtn">
+            Review
+          </button>
+
+          <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Review (From 1 to 5):<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5<br>
+                    Leave a comment:<br>
+                    <textarea></textarea>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -126,8 +209,6 @@
             modern portraiture through thematic displays and chronological <br>
             journeys through his evolving style.</p>
           <p><u>Location:</u> Amsterdam, Netherlands</p>
-
-          </div>
         </div>
 
         <div class="slider">
@@ -147,7 +228,7 @@
             <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
           </a>
 
-          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
+           <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
             Add
           </button>
 
@@ -166,7 +247,7 @@
                     Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
                     Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
                     Text:<br><textarea id="museu_description" required></textarea>
-                  
+
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -176,9 +257,92 @@
               </div>
             </div>
           </div>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#ticketModal" id="ticketModalBtn">
+            Buy Tickets
+          </button>
+
+          <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Time:<br>
+                    <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                    <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                    <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                    <label for="day">Available Dates</label><br>
+                    <select name="day" id="day">
+                      <option value="jan29">January 29th</option>
+                      <option value="feb3">February 3th</option>
+                      <option value="feb18">February 18th</option>
+                      <option value="mar8">March 8th</option>
+                    </select><br><br>
+                    Tickets:<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5
+                    <input type="radio" name="hour" value="6"> 6
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#reviewModal" id="reviewModalBtn">
+            Review
+          </button>
+
+          <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Review (From 1 to 5):<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5<br>
+                    Leave a comment:<br>
+                    <textarea></textarea>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
-        </div>
-        
       </div>
 
       <div id="container3">
@@ -195,8 +359,6 @@
             from the back and in profile, images that Paulino transposes onto canvas, <br>
             cuts, and sutures. </p>
           <p><u>Location:</u> Milan, Italy</p>
-
-          </div>
         </div>
 
         <div class="slider">
@@ -216,7 +378,7 @@
             <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
           </a>
 
-          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
+           <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
             Add
           </button>
 
@@ -235,7 +397,7 @@
                     Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
                     Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
                     Text:<br><textarea id="museu_description" required></textarea>
-                  
+
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -245,9 +407,92 @@
               </div>
             </div>
           </div>
-        </div>
-        </div>
 
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#ticketModal" id="ticketModalBtn">
+            Buy Tickets
+          </button>
+
+          <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Time:<br>
+                    <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                    <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                    <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                    <label for="day">Available Dates</label><br>
+                    <select name="day" id="day">
+                      <option value="jan29">January 29th</option>
+                      <option value="feb3">February 3th</option>
+                      <option value="feb18">February 18th</option>
+                      <option value="mar8">March 8th</option>
+                    </select><br><br>
+                    Tickets:<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5
+                    <input type="radio" name="hour" value="6"> 6
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#reviewModal" id="reviewModalBtn">
+            Review
+          </button>
+
+          <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Review (From 1 to 5):<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5<br>
+                    Leave a comment:<br>
+                    <textarea></textarea>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <div id="container4">
@@ -265,8 +510,6 @@
             light, and fleeting impressions, a departure from tradition <br>
             that scandalized critics but established a new avant-garde art movement.</p>
           <p><u>Location:</u> Paris, France</p>
-
-          </div>
         </div>
 
         <div class="slider">
@@ -286,7 +529,7 @@
             <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
           </a>
 
-          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
+           <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
             Add
           </button>
 
@@ -305,7 +548,7 @@
                     Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
                     Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
                     Text:<br><textarea id="museu_description" required></textarea>
-                  
+
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -315,9 +558,92 @@
               </div>
             </div>
           </div>
-        </div>
-        </div>
 
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#ticketModal" id="ticketModalBtn">
+            Buy Tickets
+          </button>
+
+          <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Time:<br>
+                    <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                    <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                    <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                    <label for="day">Available Dates</label><br>
+                    <select name="day" id="day">
+                      <option value="jan29">January 29th</option>
+                      <option value="feb3">February 3th</option>
+                      <option value="feb18">February 18th</option>
+                      <option value="mar8">March 8th</option>
+                    </select><br><br>
+                    Tickets:<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5
+                    <input type="radio" name="hour" value="6"> 6
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#reviewModal" id="reviewModalBtn">
+            Review
+          </button>
+
+          <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Review (From 1 to 5):<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5<br>
+                    Leave a comment:<br>
+                    <textarea></textarea>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <div id="container5">
@@ -339,8 +665,6 @@
             charged works addressing war and oppression, proving it a dynamic movement<br>
             beyond its initial French context. </p>
           <p><u>Location:</u> Athens, Greece</p>
-
-          </div>
         </div>
 
         <div class="slider">
@@ -360,7 +684,7 @@
             <img src="/EXTRA/circle.png" alt="Imagem de um círculo" id="sliderImg">
           </a>
 
-          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
+           <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal" id="addModalBtn">
             Add
           </button>
 
@@ -379,7 +703,7 @@
                     Title:<br><input type="text" name="museu_name" id="museu_name" required><br>
                     Image:<br><input type="file" name="museu_image" id="museu_image" required><br>
                     Text:<br><textarea id="museu_description" required></textarea>
-                  
+
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -389,9 +713,92 @@
               </div>
             </div>
           </div>
-        </div>
-        </div>
 
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#ticketModal" id="ticketModalBtn">
+            Buy Tickets
+          </button>
+
+          <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Time:<br>
+                    <input type="radio" name="hour" value="morning" checked> 9h00-11h00<br>
+                    <input type="radio" name="hour" value="afternoon"> 14h00-16h00<br>
+                    <input type="radio" name="hour" value="night"> 19h00-21h00<br><br>
+                    <label for="day">Available Dates</label><br>
+                    <select name="day" id="day">
+                      <option value="jan29">January 29th</option>
+                      <option value="feb3">February 3th</option>
+                      <option value="feb18">February 18th</option>
+                      <option value="mar8">March 8th</option>
+                    </select><br><br>
+                    Tickets:<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5
+                    <input type="radio" name="hour" value="6"> 6
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#reviewModal" id="reviewModalBtn">
+            Review
+          </button>
+
+          <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addModalLabel">Buy Tickets</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    First Name:<br><input type="text" name="firstname" required><br>
+                    Last Name:<br><input type="text" name="lastname" required><br>
+                    Email:<br><input type="email" name="email" placeholder="example@gmail.com" required><br><br>
+                    Review (From 1 to 5):<br>
+                    <input type="radio" name="hour" value="1" checked> 1
+                    <input type="radio" name="hour" value="2"> 2
+                    <input type="radio" name="hour" value="3"> 3
+                    <input type="radio" name="hour" value="4"> 4
+                    <input type="radio" name="hour" value="5"> 5<br>
+                    Leave a comment:<br>
+                    <textarea></textarea>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
   </main>
